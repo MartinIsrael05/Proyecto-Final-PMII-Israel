@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "After Hours",
+    "artist": "The Weeknd",
+    "year": 2020,
+    "genre": "Synth-pop",
+    "cover": "https://via.placeholder.com/300",
+    "liked": false
+  },
+
+   {
+    "id": 2,
+    "title": "Un Verano Sin Ti",
+    "artist": "Bad Bunny",
+    "year": 2022,
+    "genre": "Reggaeton",
+    "cover": "https://via.placeholder.com/300",
+    "liked": true
+  }
+]
+

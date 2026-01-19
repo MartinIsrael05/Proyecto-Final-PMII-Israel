@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@soundlab.com",
+    "password": "admin123",
+    "isSubscribed": true,
+    "isAdmin": true,
+    "registerDate": "2024-06-10",
+    "likedAlbumIDs": []
+  }
+]

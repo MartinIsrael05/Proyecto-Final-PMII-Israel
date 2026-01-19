@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+}
+
+#album-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.album-card {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+}

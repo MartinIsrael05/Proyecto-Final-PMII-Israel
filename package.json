@@ -1,0 +1,24 @@
+{
+  "name": "proyecto-final-pmii-israel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinIsrael05/Proyecto-Final-PMII-Israel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartinIsrael05/Proyecto-Final-PMII-Israel/issues"
+  },
+  "homepage": "https://github.com/MartinIsrael05/Proyecto-Final-PMII-Israel#readme",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
