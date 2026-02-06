@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SoundLab Admin</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+  <body data-page="admin">
+    <header class="site-header">
+      <div class="brand">
+        <span class="logo">SoundLab</span>
+        <span class="tagline">Panel de administracion</span>
+      </div>
+      <nav class="site-nav">
+        <a href="./index.html">Home</a>
+        <a class="is-active" href="./admin.html">Admin</a>
+        <a href="./research.html">Investigacion</a>
+      </nav>
+    </header>
+
+    <main class="page" id="admin-root">
+      <section id="admin-login" class="panel">
+        <h1>Acceso admin</h1>
+        <p>Ingresa con un usuario admin para gestionar albums y usuarios.</p>
+        <form id="admin-login-form" class="admin-form">
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" required />
+          </label>
+          <button type="submit">Ingresar</button>
+        </form>
+      </section>
+
+      <section id="admin-message" class="admin-message hidden"></section>
+
+      <section id="admin-dashboard" class="panel hidden">
+        <div class="admin-toolbar">
+          <div class="tab-group">
+            <button class="tab-button is-active" data-tab="albums">Albums</button>
+            <button class="tab-button" data-tab="users">Usuarios</button>
+          </div>
+          <button class="ghost" data-action="logout">Cerrar sesion</button>
+        </div>
+
+        <div id="admin-feedback" class="admin-feedback info"></div>
+
+        <div class="admin-layout">
+          <div id="admin-form"></div>
+          <div id="admin-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./dist/main.js"></script>
+  </body>
+</html>

@@ -1,54 +1,63 @@
-console.log("Home real cargado");
+import { loadAlbums } from "../services/data-service.js";
+import type { Album } from "../models/album.js";
 
-// Definimos el tipo de dato que esperamos del JSON
-interface AlbumData {
-  id: number;
-  title: string;
-  artist: string;
-  year: number;
-  genre: string;
-  cover: string;
-  liked: boolean;
-}
+console.log("Home cargado");
 
-// Función asincrónica para cargar los álbumes
-async function loadAlbums(): Promise<void> {
-  try {
-    // 1. Fetch al JSON (asincronismo)
-    const response = await fetch("public/data/albums.json");
+const container = document.getElementById("album-container");
 
-    // 2. Convertimos la respuesta a JSON tipado
-    const albums: AlbumData[] = await response.json();
+if (container) {
+  const albumContainer = container;
+  let albumsState: Album[] = [];
 
-    // 3. Obtenemos el contenedor del DOM
-    const container = document.getElementById("album-container");
-    if (!container) return;
+  function renderAlbums(albums: Album[]): void {
+    albumContainer.innerHTML = "";
 
-    // Limpiamos el contenedor por las dudas
-    container.innerHTML = "";
-
-    // 4. Recorremos los álbumes y creamos las cards
     albums.forEach(album => {
-      const card = document.createElement("div");
+      const card = document.createElement("article");
       card.className = "album-card";
 
       card.innerHTML = `
         <img src="${album.cover}" alt="${album.title}" />
-        <h3>${album.title}</h3>
-        <p>${album.artist} (${album.year})</p>
-        <small>${album.genre}</small>
-        <button class="like-btn">
-          ${album.liked ? "❤️" : "🤍"}
-        </button>
+        <div class="album-content">
+          <h3>${album.title}</h3>
+          <p>${album.artist} (${album.year})</p>
+          <small>${album.genre}</small>
+          <button class="like-btn" data-action="toggle-like" data-id="${album.id}">
+            ${album.liked ? "Liked" : "Like"}
+          </button>
+        </div>
       `;
 
-      container.appendChild(card);
+      albumContainer.appendChild(card);
     });
-
-  } catch (error) {
-    console.error("Error cargando álbumes:", error);
   }
-}
 
-// Ejecutamos la carga al entrar a la página
-loadAlbums();
+  function toggleLike(albumId: number): void {
+    const targetAlbum = albumsState.find(album => album.id === albumId);
+    if (!targetAlbum) return;
+    targetAlbum.liked = !targetAlbum.liked;
+    renderAlbums(albumsState);
+  }
+
+  albumContainer.addEventListener("click", event => {
+    const target = event.target as HTMLElement | null;
+    const button = target?.closest<HTMLButtonElement>("[data-action='toggle-like']");
+    if (!button) return;
+
+    const id = Number(button.dataset.id);
+    if (Number.isNaN(id)) return;
+
+    toggleLike(id);
+  });
+
+  async function initHome(): Promise<void> {
+    try {
+      albumsState = await loadAlbums();
+      renderAlbums(albumsState);
+    } catch (error) {
+      console.error("Error cargando albums:", error);
+    }
+  }
+
+  initHome();
+}

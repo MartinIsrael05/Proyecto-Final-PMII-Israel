@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>SoundLab</title>
-  <link rel="stylesheet" href="./styles/main.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SoundLab</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+  <body data-page="home">
+    <header class="site-header">
+      <div class="brand">
+        <span class="logo">SoundLab</span>
+        <span class="tagline">Galeria de albums y cultura musical</span>
+      </div>
+      <nav class="site-nav">
+        <a class="is-active" href="./index.html">Home</a>
+        <a href="./admin.html">Admin</a>
+        <a href="./research.html">Investigacion</a>
+      </nav>
+    </header>
 
-  <header>
-    <h1>SoundLab</h1>
-  </header>
+    <main class="page">
+      <section class="hero">
+        <h1>Galeria de albums</h1>
+        <p>
+          Contenido cargado de forma asincronica desde JSON. Cada card es un objeto
+          que se renderiza en el DOM.
+        </p>
+      </section>
 
-  <main id="album-container">
-    <!-- Albums dinámicos -->
-  </main>
+      <section id="album-container" class="album-grid">
+        <!-- Albums dinamicos -->
+      </section>
+    </main>
 
-  <script type="module" src="./dist/main.js"></script>
-</body>
+    <script type="module" src="./dist/main.js"></script>
+  </body>
 </html>

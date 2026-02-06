@@ -1,12 +1,22 @@
 [
   {
     "id": 1,
-    "name": "Admin",
-    "email": "admin@soundlab.com",
+    "name": "Admin SoundLab",
     "password": "admin123",
+    "email": "admin@soundlab.com",
     "isSubscribed": true,
     "isAdmin": true,
-    "registerDate": "2024-06-10",
-    "likedAlbumIDs": []
+    "registerDate": "2025-11-10",
+    "likedPostIDs": [1, 2]
+  },
+  {
+    "id": 2,
+    "name": "Usuario Demo",
+    "password": "user123",
+    "email": "user@soundlab.com",
+    "isSubscribed": false,
+    "isAdmin": false,
+    "registerDate": "2025-12-01",
+    "likedPostIDs": []
   }
 ]
