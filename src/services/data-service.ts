@@ -4,6 +4,8 @@ import { User, type UserData } from "../models/user.js";
 const ALBUMS_URL = "public/data/albums.json";
 const USERS_URL = "public/data/users.json";
 
+
+
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url);
   if (!response.ok) {

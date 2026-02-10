@@ -1,3 +1,4 @@
+// Describe como vienen los datos de un álbum desde el JSON
 export interface AlbumData {
   id: number;
   title: string;
@@ -7,7 +8,7 @@ export interface AlbumData {
   cover: string;
   liked: boolean;
 }
-
+//Clase real de álbum
 export class Album {
   public id: number;
   public title: string;
@@ -27,10 +28,11 @@ export class Album {
     this.liked = data.liked;
   }
 
+  // Permite crear una instancia de Album a partir de un objeto AlbumData (de JSON a instancia de Album)
   static fromData(data: AlbumData): Album {
     return new Album(data);
   }
-
+  // Convierte una instancia de Album a un objeto AlbumData para su almacenamiento o transmisión (de instancia de Album a JSON)
   toData(): AlbumData {
     return {
       id: this.id,

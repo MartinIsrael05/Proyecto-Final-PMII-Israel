@@ -1,3 +1,4 @@
+// Describe como vienen los datos de un usuario desde el JSON
 export interface UserData {
   id: number;
   name: string;
@@ -9,6 +10,7 @@ export interface UserData {
   likedPostIDs: number[];
 }
 
+//Clase real de usuario
 export class User {
   public id: number;
   public name: string;
@@ -30,10 +32,12 @@ export class User {
     this.likedPostIDs = data.likedPostIDs;
   }
 
+  // fromData = crear un nuevo usuario a partir de un objeto UserData (de JSON a instancia de User)
   static fromData(data: UserData): User {
     return new User(data);
   }
 
+  // toData = convertir una instancia de User a un objeto UserData (de instancia de User a JSON)
   toData(): UserData {
     return {
       id: this.id,
