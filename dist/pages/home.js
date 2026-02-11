@@ -11,7 +11,7 @@ import { loadAlbums } from "../services/data-service.js";
 console.log("Home cargado");
 const container = document.getElementById("album-container");
 if (container) {
-    const albumContainer = container;
+    const albumContainer = container; // garantiza que container no sea null.
     let albumsState = [];
     function renderAlbums(albums) {
         albumContainer.innerHTML = "";
@@ -32,6 +32,7 @@ if (container) {
             albumContainer.appendChild(card);
         });
     }
+    // busca el album por id, si lo encuentra, pasa a likeado, sino no hace nada.
     function toggleLike(albumId) {
         const targetAlbum = albumsState.find(album => album.id === albumId);
         if (!targetAlbum)
@@ -39,6 +40,7 @@ if (container) {
         targetAlbum.liked = !targetAlbum.liked;
         renderAlbums(albumsState);
     }
+    // busca el boton mas cercano y si tiene el toggle-like, lo devuelve con el id del album, sino null.
     albumContainer.addEventListener("click", event => {
         const target = event.target;
         const button = target === null || target === void 0 ? void 0 : target.closest("[data-action='toggle-like']");

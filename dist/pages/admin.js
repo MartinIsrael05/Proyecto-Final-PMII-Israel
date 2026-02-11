@@ -87,7 +87,7 @@ else {
           <input type="text" name="artist" required value="${editing ? editing.artist : ""}" />
         </label>
         <label>
-          Anio
+          Año
           <input type="number" name="year" required value="${editing ? editing.year : ""}" />
         </label>
         <label>
@@ -276,6 +276,7 @@ else {
             cover,
             liked
         };
+        //si hay editingAlbumId, edita un album, sino crea uno nuevo
         if (state.editingAlbumId) {
             const target = state.albums.find(album => album.id === state.editingAlbumId);
             if (!target)

@@ -1,3 +1,4 @@
+//Clase real de usuario
 export class User {
     constructor(data) {
         this.id = data.id;
@@ -9,9 +10,11 @@ export class User {
         this.registerDate = data.registerDate;
         this.likedPostIDs = data.likedPostIDs;
     }
+    // fromData = crear un nuevo usuario a partir de un objeto UserData (de JSON a instancia de User)
     static fromData(data) {
         return new User(data);
     }
+    // toData = convertir una instancia de User a un objeto UserData (de instancia de User a JSON)
     toData() {
         return {
             id: this.id,

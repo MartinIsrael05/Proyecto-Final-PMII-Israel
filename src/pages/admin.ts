@@ -102,7 +102,7 @@ if (!root) {
           <input type="text" name="artist" required value="${editing ? editing.artist : ""}" />
         </label>
         <label>
-          Anio
+          Año
           <input type="number" name="year" required value="${editing ? editing.year : ""}" />
         </label>
         <label>
@@ -283,7 +283,7 @@ if (!root) {
 
   const readText = (formData: FormData, name: string): string => {
     const value = formData.get(name);
-    return typeof value === "string" ? value.trim() : "";
+    return typeof value === "string" ? value.trim() : ""; 
   };
 
   const readNumber = (formData: FormData, name: string): number => {
@@ -316,6 +316,7 @@ if (!root) {
       liked
     };
 
+    //si hay editingAlbumId, edita un album, sino crea uno nuevo
     if (state.editingAlbumId) {
       const target = state.albums.find(album => album.id === state.editingAlbumId);
       if (!target) return;
@@ -339,7 +340,7 @@ if (!root) {
       .split(",")
       .map(value => Number(value.trim()))
       .filter(value => Number.isFinite(value) && value > 0);
-  };
+  }; 
 
   const handleUserSubmit = (form: HTMLFormElement): void => {
     const formData = new FormData(form);
@@ -389,7 +390,7 @@ if (!root) {
     const index = state.albums.findIndex(album => album.id === id);
     if (index === -1) return;
     const removed = state.albums[index];
-    state.albums.splice(index, 1);
+    state.albums.splice(index, 1); 
     logAdminRequest("delete", "album", removed.toData());
     setFeedback(`Album borrado: ${removed.title}`, "success");
     render();
@@ -420,6 +421,8 @@ if (!root) {
       }
       return;
     }
+
+    
 
     const actionButton = target.closest<HTMLButtonElement>("[data-action]");
     if (!actionButton) return;
@@ -476,8 +479,7 @@ if (!root) {
       event.preventDefault();
       handleUserSubmit(form);
     }
-  });
-
+  }); 
   loginForm.addEventListener("submit", handleLogin);
 
   const initAdmin = async (): Promise<void> => {

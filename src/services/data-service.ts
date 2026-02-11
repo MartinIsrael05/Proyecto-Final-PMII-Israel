@@ -5,8 +5,8 @@ const ALBUMS_URL = "public/data/albums.json";
 const USERS_URL = "public/data/users.json";
 
 
-
-async function fetchJson<T>(url: string): Promise<T> {
+// Función genérica para cargar y parsear JSON desde una URL, con manejo de errores
+async function fetchJson<T>(url: string): Promise<T> { // T es un tipo genérico que representa el tipo de datos que esperamos recibir (despues puede servir tanto para albumes como para usuarios)
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`No se pudo cargar ${url} (${response.status})`);

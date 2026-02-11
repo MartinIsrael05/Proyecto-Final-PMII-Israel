@@ -11,6 +11,7 @@ import { Album } from "../models/album.js";
 import { User } from "../models/user.js";
 const ALBUMS_URL = "public/data/albums.json";
 const USERS_URL = "public/data/users.json";
+// Función genérica para cargar y parsear JSON desde una URL, con manejo de errores
 function fetchJson(url) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(url);
