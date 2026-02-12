@@ -11,6 +11,23 @@ import { Album } from "../models/album.js";
 import { User } from "../models/user.js";
 const ALBUMS_URL = "public/data/albums.json";
 const USERS_URL = "public/data/users.json";
+const ALBUMS_STORAGE_KEY = "soundlab_albums";
+const USERS_STORAGE_KEY = "soundlab_users";
+function readStorage(key) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw)
+            return null;
+        return JSON.parse(raw);
+    }
+    catch (error) {
+        console.warn("Storage corrupto o inaccesible:", key, error);
+        return null;
+    }
+}
+function writeStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
 // Función genérica para cargar y parsear JSON desde una URL, con manejo de errores
 function fetchJson(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -23,13 +40,30 @@ function fetchJson(url) {
 }
 export function loadAlbums() {
     return __awaiter(this, void 0, void 0, function* () {
+        const stored = readStorage(ALBUMS_STORAGE_KEY);
+        if (stored !== null) {
+            return stored.map(Album.fromData);
+        }
         const data = yield fetchJson(ALBUMS_URL);
+        writeStorage(ALBUMS_STORAGE_KEY, data);
         return data.map(Album.fromData);
     });
 }
 export function loadUsers() {
     return __awaiter(this, void 0, void 0, function* () {
+        const stored = readStorage(USERS_STORAGE_KEY);
+        if (stored !== null) {
+            return stored.map(User.fromData);
+        }
         const data = yield fetchJson(USERS_URL);
+        writeStorage(USERS_STORAGE_KEY, data);
         return data.map(User.fromData);
     });
+}
+// convierten objetos Album y User a JSON y los guardan en LocalStorage
+export function saveAlbums(albums) {
+    writeStorage(ALBUMS_STORAGE_KEY, albums.map(album => album.toData()));
+}
+export function saveUsers(users) {
+    writeStorage(USERS_STORAGE_KEY, users.map(user => user.toData()));
 }

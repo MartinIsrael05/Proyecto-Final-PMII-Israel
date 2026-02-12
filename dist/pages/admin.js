@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { loadAlbums, loadUsers } from "../services/data-service.js";
+import { loadAlbums, loadUsers, saveAlbums, saveUsers } from "../services/data-service.js";
 import { Album } from "../models/album.js";
 import { User } from "../models/user.js";
 const root = document.getElementById("admin-root");
@@ -218,11 +218,25 @@ else {
             const editing = state.albums.find(album => album.id === state.editingAlbumId);
             formContainer.innerHTML = renderAlbumForm(editing);
             listContainer.innerHTML = renderAlbumList();
+            const albumForm = formContainer.querySelector("#album-form");
+            if (albumForm) {
+                albumForm.addEventListener("submit", event => {
+                    event.preventDefault();
+                    handleAlbumSubmit(albumForm);
+                });
+            }
         }
         else {
             const editing = state.users.find(user => user.id === state.editingUserId);
             formContainer.innerHTML = renderUserForm(editing);
             listContainer.innerHTML = renderUserList();
+            const userForm = formContainer.querySelector("#user-form");
+            if (userForm) {
+                userForm.addEventListener("submit", event => {
+                    event.preventDefault();
+                    handleUserSubmit(userForm);
+                });
+            }
         }
     };
     const handleLogin = (event) => {
@@ -291,6 +305,7 @@ else {
             logAdminRequest("create", "album", data);
             setFeedback(`Album creado: ${data.title}`, "success");
         }
+        saveAlbums(state.albums);
         state.editingAlbumId = null;
         render();
     };
@@ -341,6 +356,7 @@ else {
             logAdminRequest("create", "user", data);
             setFeedback(`Usuario creado: ${data.name}`, "success");
         }
+        saveUsers(state.users);
         state.editingUserId = null;
         render();
     };
@@ -351,6 +367,7 @@ else {
         const removed = state.albums[index];
         state.albums.splice(index, 1);
         logAdminRequest("delete", "album", removed.toData());
+        saveAlbums(state.albums);
         setFeedback(`Album borrado: ${removed.title}`, "success");
         render();
     };
@@ -361,6 +378,7 @@ else {
         const removed = state.users[index];
         state.users.splice(index, 1);
         logAdminRequest("delete", "user", removed.toData());
+        saveUsers(state.users);
         setFeedback(`Usuario borrado: ${removed.name}`, "success");
         render();
     };
@@ -412,20 +430,6 @@ else {
             state.adminUser = null;
             setFeedback("Sesion cerrada.", "info");
             render();
-        }
-    });
-    root.addEventListener("submit", event => {
-        const form = event.target;
-        if (!form)
-            return;
-        if (form.id === "album-form") {
-            event.preventDefault();
-            handleAlbumSubmit(form);
-            return;
-        }
-        if (form.id === "user-form") {
-            event.preventDefault();
-            handleUserSubmit(form);
         }
     });
     loginForm.addEventListener("submit", handleLogin);
