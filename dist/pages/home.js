@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { loadAlbums } from "../services/data-service.js";
+import { loadAlbums, saveAlbums } from "../services/data-service.js";
 console.log("Home cargado");
 const container = document.getElementById("album-container");
 if (container) {
@@ -38,6 +38,7 @@ if (container) {
         if (!targetAlbum)
             return;
         targetAlbum.liked = !targetAlbum.liked;
+        saveAlbums(albumsState);
         renderAlbums(albumsState);
     }
     // busca el boton mas cercano y si tiene el toggle-like, lo devuelve con el id del album, sino null.

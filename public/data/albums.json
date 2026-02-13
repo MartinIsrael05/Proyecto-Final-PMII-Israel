@@ -5,18 +5,206 @@
     "artist": "The Weeknd",
     "year": 2020,
     "genre": "Synth-pop",
-    "cover": "https://via.placeholder.com/300",
+    "cover": "public/images/covers/after-hours.jpg",
     "liked": false
   },
-
-   {
+  {
     "id": 2,
     "title": "Un Verano Sin Ti",
     "artist": "Bad Bunny",
     "year": 2022,
     "genre": "Reggaeton",
-    "cover": "https://via.placeholder.com/300",
+    "cover": "public/images/covers/uvst.jpg",
     "liked": true
+  },
+  {
+    "id": 3,
+    "title": "Thriller",
+    "artist": "Michael Jackson",
+    "year": 1982,
+    "genre": "Pop",
+    "cover": "public/images/covers/thriller.jpg",
+    "liked": false
+  },
+  {
+    "id": 4,
+    "title": "Abbey Road",
+    "artist": "The Beatles",
+    "year": 1969,
+    "genre": "Rock",
+    "cover": "public/images/covers/abbey-road.jpg",
+    "liked": false
+  },
+  {
+    "id": 5,
+    "title": "Rumours",
+    "artist": "Fleetwood Mac",
+    "year": 1977,
+    "genre": "Soft Rock",
+    "cover": "public/images/covers/rumours.jpg",
+    "liked": false
+  },
+  {
+    "id": 6,
+    "title": "Back in Black",
+    "artist": "AC/DC",
+    "year": 1980,
+    "genre": "Hard Rock",
+    "cover": "public/images/covers/back-in-black.jpg",
+    "liked": false
+  },
+  {
+    "id": 7,
+    "title": "Nevermind",
+    "artist": "Nirvana",
+    "year": 1991,
+    "genre": "Grunge",
+    "cover": "public/images/covers/nevermind.jpg",
+    "liked": false
+  },
+  {
+    "id": 8,
+    "title": "The Dark Side of the Moon",
+    "artist": "Pink Floyd",
+    "year": 1973,
+    "genre": "Progressive Rock",
+    "cover": "public/images/covers/the-dark-side-of-the-moon.jpg",
+    "liked": false
+  },
+  {
+    "id": 9,
+    "title": "To Pimp a Butterfly",
+    "artist": "Kendrick Lamar",
+    "year": 2015,
+    "genre": "Hip Hop",
+    "cover": "public/images/covers/to-pimp-a-butterfly.jpg",
+    "liked": false
+  },
+  {
+    "id": 10,
+    "title": "Random Access Memories",
+    "artist": "Daft Punk",
+    "year": 2013,
+    "genre": "Electronic",
+    "cover": "public/images/covers/random-access-memories.jpg",
+    "liked": false
+  },
+  {
+    "id": 11,
+    "title": "Born to Die",
+    "artist": "Lana Del Rey",
+    "year": 2012,
+    "genre": "Alternative Pop",
+    "cover": "public/images/covers/born-to-die.jpg",
+    "liked": false
+  },
+  {
+    "id": 12,
+    "title": "21",
+    "artist": "Adele",
+    "year": 2011,
+    "genre": "Soul Pop",
+    "cover": "public/images/covers/21.jpg",
+    "liked": false
+  },
+  {
+    "id": 13,
+    "title": "The Eminem Show",
+    "artist": "Eminem",
+    "year": 2002,
+    "genre": "Hip Hop",
+    "cover": "public/images/covers/the-eminem-show.jpg",
+    "liked": false
+  },
+  {
+    "id": 14,
+    "title": "Hybrid Theory",
+    "artist": "Linkin Park",
+    "year": 2000,
+    "genre": "Nu Metal",
+    "cover": "public/images/covers/hybrid-theory.jpg",
+    "liked": false
+  },
+  {
+    "id": 15,
+    "title": "AM",
+    "artist": "Arctic Monkeys",
+    "year": 2013,
+    "genre": "Indie Rock",
+    "cover": "public/images/covers/am.jpg",
+    "liked": false
+  },
+  {
+    "id": 16,
+    "title": "Future Nostalgia",
+    "artist": "Dua Lipa",
+    "year": 2020,
+    "genre": "Dance Pop",
+    "cover": "public/images/covers/future-nostalgia.jpg",
+    "liked": false
+  },
+  {
+    "id": 17,
+    "title": "SOS",
+    "artist": "SZA",
+    "year": 2022,
+    "genre": "R&B",
+    "cover": "public/images/covers/sos.jpg",
+    "liked": false
+  },
+  {
+    "id": 18,
+    "title": "MTV Unplugged in New York",
+    "artist": "Nirvana",
+    "year": 1994,
+    "genre": "Acoustic Rock",
+    "cover": "public/images/covers/mtv.jpg",
+    "liked": false
+  },
+  {
+    "id": 19,
+    "title": "El Madrileno",
+    "artist": "C. Tangana",
+    "year": 2021,
+    "genre": "Latin Urban",
+    "cover": "public/images/covers/el-madrileno.jpg",
+    "liked": false
+  },
+  {
+    "id": 20,
+    "title": "Appetite for Destruction",
+    "artist": "Guns N' Roses",
+    "year": 1987,
+    "genre": "Hard Rock",
+    "cover": "public/images/covers/appetite-for-destruction.jpg",
+    "liked": false
+  },
+  {
+    "id": 21,
+    "title": "Discovery",
+    "artist": "Daft Punk",
+    "year": 2001,
+    "genre": "House",
+    "cover": "public/images/covers/discovery.jpg",
+    "liked": false
+  },
+  {
+    "id": 22,
+    "title": "good kid, m.A.A.d city",
+    "artist": "Kendrick Lamar",
+    "year": 2012,
+    "genre": "Hip Hop",
+    "cover": "public/images/covers/good-kid.jpg",
+    "liked": false
+  },
+  {
+    "id": 23,
+    "title": "YHLQMDLG",
+    "artist": "Bad Bunny",
+    "year": 2020,
+    "genre": "Latin Trap",
+    "cover": "public/images/covers/yhlqmdlg.jpg",
+    "liked": false
   }
 ]
 

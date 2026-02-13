@@ -111,7 +111,13 @@ if (!root) {
         </label>
         <label>
           Cover URL
-          <input type="text" name="cover" required value="${editing ? editing.cover : ""}" />
+          <input
+            type="text"
+            name="cover"
+            required
+            placeholder="public/images/covers/mi-cover.jpg"
+            value="${editing ? editing.cover : ""}"
+          />
         </label>
         <label class="checkbox">
           <input type="checkbox" name="liked" ${editing?.liked ? "checked" : ""} />

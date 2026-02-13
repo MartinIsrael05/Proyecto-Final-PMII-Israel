@@ -5,6 +5,13 @@ const ALBUMS_URL = "public/data/albums.json";
 const USERS_URL = "public/data/users.json";
 const ALBUMS_STORAGE_KEY = "soundlab_albums";
 const USERS_STORAGE_KEY = "soundlab_users";
+const LEGACY_PLACEHOLDER_COVER = "https://via.placeholder.com/300";
+const DEFAULT_COVER = "public/images/covers/after-hours.jpg";
+
+const PRESET_COVERS: Record<number, string> = {
+  1: "public/images/covers/after-hours.jpg",
+  2: "public/images/covers/uvst.jpg"
+}; 
 
 function readStorage<T>(key: string): T | null {
   try {
@@ -21,6 +28,17 @@ function writeStorage<T>(key: string, data: T): void {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+function normalizeAlbumCover(album: AlbumData): AlbumData {
+  const cover = album.cover?.trim();
+  if (!cover || cover === LEGACY_PLACEHOLDER_COVER) {
+    return { ...album, cover: PRESET_COVERS[album.id] ?? DEFAULT_COVER };
+  }
+  return album;
+}
+
+function normalizeAlbums(albums: AlbumData[]): AlbumData[] {
+  return albums.map(normalizeAlbumCover);
+}
 
 // Función genérica para cargar y parsear JSON desde una URL, con manejo de errores
 async function fetchJson<T>(url: string): Promise<T> { // T es un tipo genérico que representa el tipo de datos que esperamos recibir (despues puede servir tanto para albumes como para usuarios)
@@ -34,10 +52,12 @@ async function fetchJson<T>(url: string): Promise<T> { // T es un tipo genérico
 export async function loadAlbums(): Promise<Album[]> {
   const stored = readStorage<AlbumData[]>(ALBUMS_STORAGE_KEY);
   if (stored !== null) {
-    return stored.map(Album.fromData);
+    const normalizedStored = normalizeAlbums(stored);
+    writeStorage(ALBUMS_STORAGE_KEY, normalizedStored);
+    return normalizedStored.map(Album.fromData);
   }
 
-  const data = await fetchJson<AlbumData[]>(ALBUMS_URL);
+  const data = normalizeAlbums(await fetchJson<AlbumData[]>(ALBUMS_URL));
   writeStorage(ALBUMS_STORAGE_KEY, data);
   return data.map(Album.fromData);
 }

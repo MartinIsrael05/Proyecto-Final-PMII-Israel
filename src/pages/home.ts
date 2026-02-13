@@ -1,4 +1,4 @@
-import { loadAlbums } from "../services/data-service.js";
+import { loadAlbums, saveAlbums } from "../services/data-service.js";
 import type { Album } from "../models/album.js";
 
 console.log("Home cargado");
@@ -38,6 +38,7 @@ if (container) {
     const targetAlbum = albumsState.find(album => album.id === albumId);
     if (!targetAlbum) return;
     targetAlbum.liked = !targetAlbum.liked;
+    saveAlbums(albumsState);
     renderAlbums(albumsState);
   }
 

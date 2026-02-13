@@ -13,6 +13,12 @@ const ALBUMS_URL = "public/data/albums.json";
 const USERS_URL = "public/data/users.json";
 const ALBUMS_STORAGE_KEY = "soundlab_albums";
 const USERS_STORAGE_KEY = "soundlab_users";
+const LEGACY_PLACEHOLDER_COVER = "https://via.placeholder.com/300";
+const DEFAULT_COVER = "public/images/covers/after-hours.jpg";
+const PRESET_COVERS = {
+    1: "public/images/covers/after-hours.jpg",
+    2: "public/images/covers/uvst.jpg"
+};
 function readStorage(key) {
     try {
         const raw = localStorage.getItem(key);
@@ -28,6 +34,17 @@ function readStorage(key) {
 function writeStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
+function normalizeAlbumCover(album) {
+    var _a, _b;
+    const cover = (_a = album.cover) === null || _a === void 0 ? void 0 : _a.trim();
+    if (!cover || cover === LEGACY_PLACEHOLDER_COVER) {
+        return Object.assign(Object.assign({}, album), { cover: (_b = PRESET_COVERS[album.id]) !== null && _b !== void 0 ? _b : DEFAULT_COVER });
+    }
+    return album;
+}
+function normalizeAlbums(albums) {
+    return albums.map(normalizeAlbumCover);
+}
 // Función genérica para cargar y parsear JSON desde una URL, con manejo de errores
 function fetchJson(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -42,9 +59,11 @@ export function loadAlbums() {
     return __awaiter(this, void 0, void 0, function* () {
         const stored = readStorage(ALBUMS_STORAGE_KEY);
         if (stored !== null) {
-            return stored.map(Album.fromData);
+            const normalizedStored = normalizeAlbums(stored);
+            writeStorage(ALBUMS_STORAGE_KEY, normalizedStored);
+            return normalizedStored.map(Album.fromData);
         }
-        const data = yield fetchJson(ALBUMS_URL);
+        const data = normalizeAlbums(yield fetchJson(ALBUMS_URL));
         writeStorage(ALBUMS_STORAGE_KEY, data);
         return data.map(Album.fromData);
     });

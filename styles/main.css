@@ -186,6 +186,7 @@ a {
 .tab-button {
   border: 1px solid var(--border);
   background: transparent;
+  color: var(--accent);
   padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;
