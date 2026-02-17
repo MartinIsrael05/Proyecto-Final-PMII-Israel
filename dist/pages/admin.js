@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { loadAlbums, loadUsers, saveAlbums, saveUsers } from "../services/data-service.js";
+import { loadAlbums, loadUsers, saveAlbums, saveUsers, clearStoredData } from "../services/data-service.js";
 import { Album } from "../models/album.js";
 import { User } from "../models/user.js";
 const root = document.getElementById("admin-root");
@@ -41,6 +41,10 @@ else {
         editingUserId: null
     };
     const today = () => new Date().toISOString().slice(0, 10);
+    const currentYear = new Date().getFullYear();
+    const yearMin = 1900;
+    const yearMax = currentYear + 1;
+    const coversBasePath = "public/images/covers/";
     const setMessage = (text) => {
         messageSection.textContent = text;
         messageSection.classList.toggle("hidden", text.length === 0);
@@ -74,6 +78,12 @@ else {
             tab.classList.toggle("is-active", tab.dataset.tab === state.activeTab);
         });
     };
+    const getCoverFileName = (coverPath) => {
+        if (coverPath.startsWith(coversBasePath)) {
+            return coverPath.slice(coversBasePath.length);
+        }
+        return coverPath;
+    };
     const renderAlbumForm = (editing) => {
         return `
       <form id="album-form" class="admin-form">
@@ -100,8 +110,8 @@ else {
             type="text"
             name="cover"
             required
-            placeholder="public/images/covers/mi-cover.jpg"
-            value="${editing ? editing.cover : ""}"
+            placeholder="mi-cover.jpg"
+            value="${editing ? getCoverFileName(editing.cover) : ""}"
           />
         </label>
         <label class="checkbox">
@@ -230,6 +240,11 @@ else {
                     event.preventDefault();
                     handleAlbumSubmit(albumForm);
                 });
+                albumForm.addEventListener("input", () => {
+                    if (feedbackContainer.classList.contains("error")) {
+                        setFeedback("", "info");
+                    }
+                });
             }
         }
         else {
@@ -273,19 +288,50 @@ else {
         const value = Number(readText(formData, name));
         return Number.isFinite(value) ? value : 0;
     };
+    const isValidEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+    const isValidCoverFileName = (coverFileName) => {
+        return /^[^\\/]+\.(jpg|jpeg|png|webp)$/i.test(coverFileName);
+    };
+    const toCoverPath = (coverFileName) => {
+        return `${coversBasePath}${coverFileName}`;
+    };
     const handleAlbumSubmit = (form) => {
         var _a, _b;
         const formData = new FormData(form);
         const title = readText(formData, "title");
         const artist = readText(formData, "artist");
-        const year = readNumber(formData, "year");
+        const yearRaw = readText(formData, "year");
+        const year = Number.parseInt(yearRaw, 10);
         const genre = readText(formData, "genre");
-        const cover = readText(formData, "cover");
+        const coverFileName = readText(formData, "cover");
         const liked = (_b = (_a = form.querySelector("input[name='liked']")) === null || _a === void 0 ? void 0 : _a.checked) !== null && _b !== void 0 ? _b : false;
-        if (!title || !artist || !genre || !cover || !year) {
-            setFeedback("Completa todos los campos del album.", "error");
+        if (!title) {
+            setFeedback("El titulo del album es obligatorio.", "error");
             return;
         }
+        if (!artist) {
+            setFeedback("El artista del album es obligatorio.", "error");
+            return;
+        }
+        if (!genre) {
+            setFeedback("El genero del album es obligatorio.", "error");
+            return;
+        }
+        if (!coverFileName) {
+            setFeedback("La portada del album es obligatoria.", "error");
+            return;
+        }
+        if (!isValidCoverFileName(coverFileName)) {
+            setFeedback("Portada invalida. Usa solo nombre de archivo, por ejemplo: mi-cover.jpg", "error");
+            return;
+        }
+        if (!Number.isInteger(year) || year < yearMin || year > yearMax) {
+            setFeedback(`Año invalido. Debe estar entre ${yearMin} y ${yearMax}.`, "error");
+            return;
+        }
+        const cover = toCoverPath(coverFileName);
         const id = readNumber(formData, "id");
         const data = {
             id: id || getNextAlbumId(),
@@ -296,6 +342,11 @@ else {
             cover,
             liked
         };
+        const duplicatedId = state.albums.some(album => album.id === data.id && album.id !== state.editingAlbumId);
+        if (duplicatedId) {
+            setFeedback(`ID de album duplicado (${data.id}).`, "error");
+            return;
+        }
         //si hay editingAlbumId, edita un album, sino crea uno nuevo
         if (state.editingAlbumId) {
             const target = state.albums.find(album => album.id === state.editingAlbumId);
@@ -333,8 +384,24 @@ else {
         const isSubscribed = (_b = (_a = form.querySelector("input[name='isSubscribed']")) === null || _a === void 0 ? void 0 : _a.checked) !== null && _b !== void 0 ? _b : false;
         const isAdmin = (_d = (_c = form.querySelector("input[name='isAdmin']")) === null || _c === void 0 ? void 0 : _c.checked) !== null && _d !== void 0 ? _d : false;
         const likedPostIDs = parseLikedIds(readText(formData, "likedPostIDs"));
-        if (!name || !email || !password) {
-            setFeedback("Completa nombre, email y password.", "error");
+        if (!name) {
+            setFeedback("El nombre del usuario es obligatorio.", "error");
+            return;
+        }
+        if (!email) {
+            setFeedback("El email del usuario es obligatorio.", "error");
+            return;
+        }
+        if (!isValidEmail(email)) {
+            setFeedback("Email invalido.", "error");
+            return;
+        }
+        if (!password) {
+            setFeedback("La password del usuario es obligatoria.", "error");
+            return;
+        }
+        if (!registerDate || Number.isNaN(new Date(registerDate).getTime())) {
+            setFeedback("Fecha de registro invalida.", "error");
             return;
         }
         const id = readNumber(formData, "id");
@@ -348,6 +415,16 @@ else {
             isAdmin,
             likedPostIDs
         };
+        const duplicatedId = state.users.some(user => user.id === data.id && user.id !== state.editingUserId);
+        if (duplicatedId) {
+            setFeedback(`ID de usuario duplicado (${data.id}).`, "error");
+            return;
+        }
+        const duplicatedEmail = state.users.some(user => user.email.toLowerCase() === data.email.toLowerCase() && user.id !== state.editingUserId);
+        if (duplicatedEmail) {
+            setFeedback(`Email duplicado (${data.email}).`, "error");
+            return;
+        }
         if (state.editingUserId) {
             const target = state.users.find(user => user.id === state.editingUserId);
             if (!target)
@@ -371,6 +448,9 @@ else {
         if (index === -1)
             return;
         const removed = state.albums[index];
+        const confirmed = window.confirm(`Vas a borrar el album "${removed.title}". Esta accion no se puede deshacer.`);
+        if (!confirmed)
+            return;
         state.albums.splice(index, 1);
         logAdminRequest("delete", "album", removed.toData());
         saveAlbums(state.albums);
@@ -382,13 +462,39 @@ else {
         if (index === -1)
             return;
         const removed = state.users[index];
+        const confirmed = window.confirm(`Vas a borrar el usuario "${removed.name}". Esta accion no se puede deshacer.`);
+        if (!confirmed)
+            return;
         state.users.splice(index, 1);
         logAdminRequest("delete", "user", removed.toData());
         saveUsers(state.users);
         setFeedback(`Usuario borrado: ${removed.name}`, "success");
         render();
     };
-    root.addEventListener("click", event => {
+    const handleResetData = () => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        const confirmed = window.confirm("Se van a restaurar albums y usuarios desde los JSON originales. Continuar?");
+        if (!confirmed)
+            return;
+        clearStoredData();
+        try {
+            const [albums, users] = yield Promise.all([loadAlbums(), loadUsers()]);
+            state.albums = albums;
+            state.users = users;
+            state.editingAlbumId = null;
+            state.editingUserId = null;
+            if (state.adminUser) {
+                state.adminUser = (_a = users.find(user => { var _a; return user.email === ((_a = state.adminUser) === null || _a === void 0 ? void 0 : _a.email); })) !== null && _a !== void 0 ? _a : null;
+            }
+            setFeedback("Datos demo restaurados desde JSON.", "success");
+            render();
+        }
+        catch (error) {
+            console.error("Error restaurando datos demo:", error);
+            setFeedback("No se pudieron restaurar los datos demo.", "error");
+        }
+    });
+    root.addEventListener("click", (event) => __awaiter(void 0, void 0, void 0, function* () {
         const target = event.target;
         if (!target)
             return;
@@ -436,8 +542,12 @@ else {
             state.adminUser = null;
             setFeedback("Sesion cerrada.", "info");
             render();
+            return;
         }
-    });
+        if (action === "reset-data") {
+            yield handleResetData();
+        }
+    }));
     loginForm.addEventListener("submit", handleLogin);
     const initAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
         try {

@@ -1,4 +1,4 @@
-import { loadAlbums, loadUsers, saveAlbums, saveUsers } from "../services/data-service.js";
+import { loadAlbums, loadUsers, saveAlbums, saveUsers, clearStoredData } from "../services/data-service.js";
 import { Album, type AlbumData } from "../models/album.js";
 import { User, type UserData } from "../models/user.js";
 
@@ -50,6 +50,10 @@ if (!root) {
   };
 
   const today = (): string => new Date().toISOString().slice(0, 10);
+  const currentYear = new Date().getFullYear();
+  const yearMin = 1900;
+  const yearMax = currentYear + 1;
+  const coversBasePath = "public/images/covers/";
 
   const setMessage = (text: string): void => {
     messageSection.textContent = text;
@@ -89,6 +93,13 @@ if (!root) {
     });
   };
 
+  const getCoverFileName = (coverPath: string): string => {
+    if (coverPath.startsWith(coversBasePath)) {
+      return coverPath.slice(coversBasePath.length);
+    }
+    return coverPath;
+  };
+
   const renderAlbumForm = (editing?: Album): string => {
     return `
       <form id="album-form" class="admin-form">
@@ -115,8 +126,8 @@ if (!root) {
             type="text"
             name="cover"
             required
-            placeholder="public/images/covers/mi-cover.jpg"
-            value="${editing ? editing.cover : ""}"
+            placeholder="mi-cover.jpg"
+            value="${editing ? getCoverFileName(editing.cover) : ""}"
           />
         </label>
         <label class="checkbox">
@@ -262,6 +273,11 @@ if (!root) {
           event.preventDefault();
           handleAlbumSubmit(albumForm);
         });
+        albumForm.addEventListener("input", () => {
+          if (feedbackContainer.classList.contains("error")) {
+            setFeedback("", "info");
+          }
+        });
       }
     } else {
       const editing = state.users.find(user => user.id === state.editingUserId);
@@ -311,19 +327,59 @@ if (!root) {
     return Number.isFinite(value) ? value : 0;
   };
 
+  const isValidEmail = (email: string): boolean => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const isValidCoverFileName = (coverFileName: string): boolean => {
+    return /^[^\\/]+\.(jpg|jpeg|png|webp)$/i.test(coverFileName);
+  };
+
+  const toCoverPath = (coverFileName: string): string => {
+    return `${coversBasePath}${coverFileName}`;
+  };
+
   const handleAlbumSubmit = (form: HTMLFormElement): void => {
     const formData = new FormData(form);
     const title = readText(formData, "title");
     const artist = readText(formData, "artist");
-    const year = readNumber(formData, "year");
+    const yearRaw = readText(formData, "year");
+    const year = Number.parseInt(yearRaw, 10);
     const genre = readText(formData, "genre");
-    const cover = readText(formData, "cover");
+    const coverFileName = readText(formData, "cover");
     const liked = form.querySelector<HTMLInputElement>("input[name='liked']")?.checked ?? false;
 
-    if (!title || !artist || !genre || !cover || !year) {
-      setFeedback("Completa todos los campos del album.", "error");
+    if (!title) {
+      setFeedback("El titulo del album es obligatorio.", "error");
       return;
     }
+
+    if (!artist) {
+      setFeedback("El artista del album es obligatorio.", "error");
+      return;
+    }
+
+    if (!genre) {
+      setFeedback("El genero del album es obligatorio.", "error");
+      return;
+    }
+
+    if (!coverFileName) {
+      setFeedback("La portada del album es obligatoria.", "error");
+      return;
+    }
+
+    if (!isValidCoverFileName(coverFileName)) {
+      setFeedback("Portada invalida. Usa solo nombre de archivo, por ejemplo: mi-cover.jpg", "error");
+      return;
+    }
+
+    if (!Number.isInteger(year) || year < yearMin || year > yearMax) {
+      setFeedback(`Año invalido. Debe estar entre ${yearMin} y ${yearMax}.`, "error");
+      return;
+    }
+
+    const cover = toCoverPath(coverFileName);
 
     const id = readNumber(formData, "id");
     const data: AlbumData = {
@@ -335,6 +391,14 @@ if (!root) {
       cover,
       liked
     };
+
+    const duplicatedId = state.albums.some(
+      album => album.id === data.id && album.id !== state.editingAlbumId
+    );
+    if (duplicatedId) {
+      setFeedback(`ID de album duplicado (${data.id}).`, "error");
+      return;
+    }
 
     //si hay editingAlbumId, edita un album, sino crea uno nuevo
     if (state.editingAlbumId) {
@@ -373,8 +437,28 @@ if (!root) {
     const isAdmin = form.querySelector<HTMLInputElement>("input[name='isAdmin']")?.checked ?? false;
     const likedPostIDs = parseLikedIds(readText(formData, "likedPostIDs"));
 
-    if (!name || !email || !password) {
-      setFeedback("Completa nombre, email y password.", "error");
+    if (!name) {
+      setFeedback("El nombre del usuario es obligatorio.", "error");
+      return;
+    }
+
+    if (!email) {
+      setFeedback("El email del usuario es obligatorio.", "error");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setFeedback("Email invalido.", "error");
+      return;
+    }
+
+    if (!password) {
+      setFeedback("La password del usuario es obligatoria.", "error");
+      return;
+    }
+
+    if (!registerDate || Number.isNaN(new Date(registerDate).getTime())) {
+      setFeedback("Fecha de registro invalida.", "error");
       return;
     }
 
@@ -389,6 +473,22 @@ if (!root) {
       isAdmin,
       likedPostIDs
     };
+
+    const duplicatedId = state.users.some(
+      user => user.id === data.id && user.id !== state.editingUserId
+    );
+    if (duplicatedId) {
+      setFeedback(`ID de usuario duplicado (${data.id}).`, "error");
+      return;
+    }
+
+    const duplicatedEmail = state.users.some(
+      user => user.email.toLowerCase() === data.email.toLowerCase() && user.id !== state.editingUserId
+    );
+    if (duplicatedEmail) {
+      setFeedback(`Email duplicado (${data.email}).`, "error");
+      return;
+    }
 
     if (state.editingUserId) {
       const target = state.users.find(user => user.id === state.editingUserId);
@@ -412,6 +512,8 @@ if (!root) {
     const index = state.albums.findIndex(album => album.id === id);
     if (index === -1) return;
     const removed = state.albums[index];
+    const confirmed = window.confirm(`Vas a borrar el album "${removed.title}". Esta accion no se puede deshacer.`);
+    if (!confirmed) return;
     state.albums.splice(index, 1); 
     logAdminRequest("delete", "album", removed.toData());
     saveAlbums(state.albums);
@@ -423,6 +525,8 @@ if (!root) {
     const index = state.users.findIndex(user => user.id === id);
     if (index === -1) return;
     const removed = state.users[index];
+    const confirmed = window.confirm(`Vas a borrar el usuario "${removed.name}". Esta accion no se puede deshacer.`);
+    if (!confirmed) return;
     state.users.splice(index, 1);
     logAdminRequest("delete", "user", removed.toData());
     saveUsers(state.users);
@@ -430,7 +534,30 @@ if (!root) {
     render();
   };
 
-  root.addEventListener("click", event => {
+  const handleResetData = async (): Promise<void> => {
+    const confirmed = window.confirm("Se van a restaurar albums y usuarios desde los JSON originales. Continuar?");
+    if (!confirmed) return;
+
+    clearStoredData();
+
+    try {
+      const [albums, users] = await Promise.all([loadAlbums(), loadUsers()]);
+      state.albums = albums;
+      state.users = users;
+      state.editingAlbumId = null;
+      state.editingUserId = null;
+      if (state.adminUser) {
+        state.adminUser = users.find(user => user.email === state.adminUser?.email) ?? null;
+      }
+      setFeedback("Datos demo restaurados desde JSON.", "success");
+      render();
+    } catch (error) {
+      console.error("Error restaurando datos demo:", error);
+      setFeedback("No se pudieron restaurar los datos demo.", "error");
+    }
+  };
+
+  root.addEventListener("click", async event => {
     const target = event.target as HTMLElement | null;
     if (!target) return;
 
@@ -486,6 +613,11 @@ if (!root) {
       state.adminUser = null;
       setFeedback("Sesion cerrada.", "info");
       render();
+      return;
+    }
+
+    if (action === "reset-data") {
+      await handleResetData();
     }
   });
 

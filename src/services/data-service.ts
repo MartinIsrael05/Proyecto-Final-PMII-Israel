@@ -87,3 +87,8 @@ export function saveUsers(users: User[]): void {
     users.map(user => user.toData())
   );
 }
+
+export function clearStoredData(): void {
+  localStorage.removeItem(ALBUMS_STORAGE_KEY);
+  localStorage.removeItem(USERS_STORAGE_KEY);
+}

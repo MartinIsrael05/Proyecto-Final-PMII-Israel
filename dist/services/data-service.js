@@ -86,3 +86,7 @@ export function saveAlbums(albums) {
 export function saveUsers(users) {
     writeStorage(USERS_STORAGE_KEY, users.map(user => user.toData()));
 }
+export function clearStoredData() {
+    localStorage.removeItem(ALBUMS_STORAGE_KEY);
+    localStorage.removeItem(USERS_STORAGE_KEY);
+}
