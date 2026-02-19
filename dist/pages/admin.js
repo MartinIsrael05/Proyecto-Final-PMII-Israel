@@ -22,6 +22,9 @@ else {
     const formContainer = document.getElementById("admin-form");
     const listContainer = document.getElementById("admin-list");
     const feedbackContainer = document.getElementById("admin-feedback");
+    const searchInput = document.getElementById("admin-search");
+    const listStatus = document.getElementById("admin-list-status");
+    const logList = document.getElementById("admin-log-list");
     const loginForm = document.getElementById("admin-login-form");
     if (!loginSection ||
         !messageSection ||
@@ -29,6 +32,9 @@ else {
         !formContainer ||
         !listContainer ||
         !feedbackContainer ||
+        !searchInput ||
+        !listStatus ||
+        !logList ||
         !loginForm) {
         throw new Error("Estructura Admin incompleta.");
     }
@@ -38,7 +44,9 @@ else {
         activeTab: "albums",
         adminUser: null,
         editingAlbumId: null,
-        editingUserId: null
+        editingUserId: null,
+        searchTerm: "",
+        actionLog: []
     };
     const today = () => new Date().toISOString().slice(0, 10);
     const currentYear = new Date().getFullYear();
@@ -53,6 +61,20 @@ else {
         feedbackContainer.textContent = text;
         feedbackContainer.className = `admin-feedback ${tone}`;
     };
+    const setListStatus = (text, tone = "info") => {
+        listStatus.textContent = text;
+        listStatus.className = `status-line ${tone}`;
+    };
+    const renderActionLog = () => {
+        if (state.actionLog.length === 0) {
+            logList.innerHTML = `<li class="empty-state">Sin acciones todavia.</li>`;
+            return;
+        }
+        logList.innerHTML = state.actionLog
+            .map(line => `<li>${line}</li>`)
+            .join("");
+    };
+    const normalizeText = (value) => value.trim().toLowerCase();
     const logAdminRequest = (action, entity, payload) => {
         var _a, _b;
         const request = {
@@ -63,6 +85,10 @@ else {
             payload
         };
         console.log("Admin request:", request);
+        const timestamp = new Date(request.timestamp).toLocaleTimeString();
+        const line = `[${timestamp}] ${entity.toUpperCase()} ${action.toUpperCase()}`;
+        state.actionLog = [line, ...state.actionLog].slice(0, 12);
+        renderActionLog();
     };
     const getNextAlbumId = () => {
         const ids = state.albums.map(album => album.id);
@@ -170,11 +196,24 @@ else {
     };
     const renderAlbumList = () => {
         if (state.albums.length === 0) {
+            setListStatus("No hay albums cargados.", "info");
             return `<p class="empty-state">No hay albums cargados.</p>`;
         }
+        const searchTerm = normalizeText(state.searchTerm);
+        const visibleAlbums = state.albums.filter(album => {
+            if (!searchTerm)
+                return true;
+            const text = `${album.title} ${album.artist} ${album.genre} ${album.year}`;
+            return normalizeText(text).includes(searchTerm);
+        });
+        if (visibleAlbums.length === 0) {
+            setListStatus("No hay resultados para la busqueda actual.", "info");
+            return `<p class="empty-state">No hay resultados para la busqueda.</p>`;
+        }
+        setListStatus(`Mostrando ${visibleAlbums.length} de ${state.albums.length} albums.`, "success");
         return `
       <div class="admin-grid">
-        ${state.albums
+        ${visibleAlbums
             .map(album => `
               <article class="admin-card">
                 <img src="${album.cover}" alt="${album.title}" />
@@ -196,11 +235,24 @@ else {
     };
     const renderUserList = () => {
         if (state.users.length === 0) {
+            setListStatus("No hay usuarios cargados.", "info");
             return `<p class="empty-state">No hay usuarios cargados.</p>`;
         }
+        const searchTerm = normalizeText(state.searchTerm);
+        const visibleUsers = state.users.filter(user => {
+            if (!searchTerm)
+                return true;
+            const text = `${user.name} ${user.email} ${user.registerDate}`;
+            return normalizeText(text).includes(searchTerm);
+        });
+        if (visibleUsers.length === 0) {
+            setListStatus("No hay resultados para la busqueda actual.", "info");
+            return `<p class="empty-state">No hay resultados para la busqueda.</p>`;
+        }
+        setListStatus(`Mostrando ${visibleUsers.length} de ${state.users.length} usuarios.`, "success");
         return `
       <div class="admin-grid">
-        ${state.users
+        ${visibleUsers
             .map(user => `
               <article class="admin-card">
                 <div>
@@ -225,11 +277,18 @@ else {
         if (!state.adminUser) {
             loginSection.classList.remove("hidden");
             dashboardSection.classList.add("hidden");
+            setListStatus("", "info");
             return;
         }
         loginSection.classList.add("hidden");
         dashboardSection.classList.remove("hidden");
         renderTabs();
+        renderActionLog();
+        searchInput.placeholder =
+            state.activeTab === "albums"
+                ? "Buscar album por titulo, artista o genero..."
+                : "Buscar usuario por nombre o email...";
+        searchInput.value = state.searchTerm;
         if (state.activeTab === "albums") {
             const editing = state.albums.find(album => album.id === state.editingAlbumId);
             formContainer.innerHTML = renderAlbumForm(editing);
@@ -487,11 +546,13 @@ else {
                 state.adminUser = (_a = users.find(user => { var _a; return user.email === ((_a = state.adminUser) === null || _a === void 0 ? void 0 : _a.email); })) !== null && _a !== void 0 ? _a : null;
             }
             setFeedback("Datos demo restaurados desde JSON.", "success");
+            setListStatus("Datos restaurados correctamente.", "success");
             render();
         }
         catch (error) {
             console.error("Error restaurando datos demo:", error);
             setFeedback("No se pudieron restaurar los datos demo.", "error");
+            setListStatus("Error al restaurar datos demo.", "error");
         }
     });
     root.addEventListener("click", (event) => __awaiter(void 0, void 0, void 0, function* () {
@@ -505,6 +566,7 @@ else {
                 state.activeTab = tab;
                 state.editingAlbumId = null;
                 state.editingUserId = null;
+                state.searchTerm = "";
                 render();
             }
             return;
@@ -540,6 +602,7 @@ else {
         }
         if (action === "logout") {
             state.adminUser = null;
+            state.searchTerm = "";
             setFeedback("Sesion cerrada.", "info");
             render();
             return;
@@ -548,18 +611,26 @@ else {
             yield handleResetData();
         }
     }));
+    searchInput.addEventListener("input", () => {
+        state.searchTerm = searchInput.value;
+        render();
+    });
     loginForm.addEventListener("submit", handleLogin);
     const initAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            setFeedback("Cargando datos...", "info");
+            setListStatus("Cargando datos...", "info");
             const [albums, users] = yield Promise.all([loadAlbums(), loadUsers()]);
             state.albums = albums;
             state.users = users;
             setMessage("");
             setFeedback("Datos cargados. Inicia sesion con un admin.", "info");
+            setListStatus("Datos listos para administrar.", "success");
         }
         catch (error) {
             console.error("Error cargando datos:", error);
             setMessage("No se pudieron cargar los datos.");
+            setListStatus("Error al cargar datos.", "error");
         }
     });
     render();

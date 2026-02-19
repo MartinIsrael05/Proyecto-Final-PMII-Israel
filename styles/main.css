@@ -104,9 +104,25 @@ a {
   max-width: 70ch;
 }
 
+.home-controls {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.home-controls input,
+.home-controls select,
+.admin-search-row input {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+}
+
 .album-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -176,6 +192,14 @@ a {
   align-items: center;
   margin-bottom: 20px;
   gap: 16px;
+}
+
+.admin-search-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 420px) 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .tab-group {
@@ -309,6 +333,51 @@ button.ghost,
   color: #a3382f;
 }
 
+.status-line {
+  margin-top: 0.5em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.status-line.success {
+margin-top: 0.5em;
+  color: #2b6e52;
+}
+
+.status-line.error {
+  margin-top: 0.5em;
+  color: #a3382f;
+}
+
+.admin-log {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
+}
+
+.admin-log h2 {
+  margin: 0 0 10px;
+  font-family: "Fraunces", serif;
+  font-size: 24px;
+}
+
+.admin-log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.admin-log-list li {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .empty-state {
   color: var(--muted);
 }
@@ -345,11 +414,37 @@ button.ghost,
     align-items: flex-start;
   }
 
+  .home-controls {
+    grid-template-columns: 1fr;
+  }
+
   .admin-layout {
     grid-template-columns: 1fr;
   }
 
+  .admin-search-row {
+    grid-template-columns: 1fr;
+  }
+
   .admin-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1100px) {
+  .album-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .album-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .album-grid {
     grid-template-columns: 1fr;
   }
 }

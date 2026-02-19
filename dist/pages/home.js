@@ -11,8 +11,25 @@ import { loadAlbums, saveAlbums } from "../services/data-service.js";
 console.log("Home cargado");
 const container = document.getElementById("album-container");
 if (container) {
-    const albumContainer = container; // garantiza que container no sea null.
+    const albumContainer = container;
+    const searchInput = document.getElementById("home-search");
+    const genreSelect = document.getElementById("home-genre");
+    const sortSelect = document.getElementById("home-sort");
+    const clearFiltersButton = document.getElementById("home-clear-filters");
+    const statusLine = document.getElementById("home-status");
     let albumsState = [];
+    const filters = {
+        searchTerm: "",
+        genre: "",
+        sort: "default"
+    };
+    const normalizeText = (value) => value.trim().toLowerCase();
+    const setStatus = (text, tone = "info") => {
+        if (!statusLine)
+            return;
+        statusLine.textContent = text;
+        statusLine.className = `status-line ${tone}`;
+    };
     function renderAlbums(albums) {
         albumContainer.innerHTML = "";
         albums.forEach(album => {
@@ -32,16 +49,61 @@ if (container) {
             albumContainer.appendChild(card);
         });
     }
-    // busca el album por id, si lo encuentra, pasa a likeado, sino no hace nada.
+    const getFilteredAlbums = () => {
+        const term = normalizeText(filters.searchTerm);
+        let filtered = [...albumsState];
+        if (term) {
+            filtered = filtered.filter(album => {
+                return (normalizeText(album.title).includes(term) ||
+                    normalizeText(album.artist).includes(term));
+            });
+        }
+        if (filters.genre) {
+            filtered = filtered.filter(album => album.genre === filters.genre);
+        }
+        if (filters.sort === "title-asc") {
+            filtered.sort((a, b) => a.title.localeCompare(b.title));
+        }
+        else if (filters.sort === "year-desc") {
+            filtered.sort((a, b) => b.year - a.year);
+        }
+        else if (filters.sort === "year-asc") {
+            filtered.sort((a, b) => a.year - b.year);
+        }
+        return filtered;
+    };
+    const renderGenres = () => {
+        if (!genreSelect)
+            return;
+        const selectedValue = filters.genre;
+        const genres = Array.from(new Set(albumsState.map(album => album.genre))).sort((a, b) => a.localeCompare(b));
+        genreSelect.innerHTML = `
+      <option value="">Todos los generos</option>
+      ${genres.map(genre => `<option value="${genre}">${genre}</option>`).join("")}
+    `;
+        genreSelect.value = selectedValue;
+    };
+    const renderHome = () => {
+        const visibleAlbums = getFilteredAlbums();
+        renderAlbums(visibleAlbums);
+        if (albumsState.length === 0) {
+            setStatus("No hay albums cargados.", "info");
+            return;
+        }
+        if (visibleAlbums.length === 0) {
+            setStatus("No hay resultados para los filtros actuales.", "info");
+            return;
+        }
+        setStatus(`Mostrando ${visibleAlbums.length} de ${albumsState.length} albums.`, "success");
+    };
     function toggleLike(albumId) {
         const targetAlbum = albumsState.find(album => album.id === albumId);
         if (!targetAlbum)
             return;
         targetAlbum.liked = !targetAlbum.liked;
         saveAlbums(albumsState);
-        renderAlbums(albumsState);
+        renderHome();
     }
-    // busca el boton mas cercano y si tiene el toggle-like, lo devuelve con el id del album, sino null.
     albumContainer.addEventListener("click", event => {
         const target = event.target;
         const button = target === null || target === void 0 ? void 0 : target.closest("[data-action='toggle-like']");
@@ -52,13 +114,42 @@ if (container) {
             return;
         toggleLike(id);
     });
+    searchInput === null || searchInput === void 0 ? void 0 : searchInput.addEventListener("input", () => {
+        filters.searchTerm = searchInput.value;
+        renderHome();
+    });
+    genreSelect === null || genreSelect === void 0 ? void 0 : genreSelect.addEventListener("change", () => {
+        filters.genre = genreSelect.value;
+        renderHome();
+    });
+    sortSelect === null || sortSelect === void 0 ? void 0 : sortSelect.addEventListener("change", () => {
+        const sortValue = sortSelect.value;
+        filters.sort = sortValue;
+        renderHome();
+    });
+    clearFiltersButton === null || clearFiltersButton === void 0 ? void 0 : clearFiltersButton.addEventListener("click", () => {
+        filters.searchTerm = "";
+        filters.genre = "";
+        filters.sort = "default";
+        if (searchInput)
+            searchInput.value = "";
+        if (genreSelect)
+            genreSelect.value = "";
+        if (sortSelect)
+            sortSelect.value = "default";
+        renderHome();
+    });
     function initHome() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                setStatus("Cargando albums...", "info");
                 albumsState = yield loadAlbums();
-                renderAlbums(albumsState);
+                renderGenres();
+                renderHome();
             }
             catch (error) {
+                albumContainer.innerHTML = "";
+                setStatus("Error cargando albums.", "error");
                 console.error("Error cargando albums:", error);
             }
         });

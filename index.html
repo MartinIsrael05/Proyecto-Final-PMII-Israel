@@ -26,6 +26,20 @@
           Contenido cargado de forma asincronica desde JSON. Cada card es un objeto
           que se renderiza en el DOM.
         </p>
+        <div class="home-controls">
+          <input id="home-search" type="search" placeholder="Buscar por titulo o artista..." />
+          <select id="home-genre">
+            <option value="">Todos los generos</option>
+          </select>
+          <select id="home-sort">
+            <option value="default">Orden por defecto</option>
+            <option value="title-asc">Titulo (A-Z)</option>
+            <option value="year-desc">Año (mas nuevo)</option>
+            <option value="year-asc">Año (mas viejo)</option>
+          </select>
+          <button id="home-clear-filters" type="button" class="ghost">Limpiar filtros</button>
+        </div>
+        <p id="home-status" class="status-line info"></p>
       </section>
 
       <section id="album-container" class="album-grid">
