@@ -19,10 +19,155 @@
       </nav>
     </header>
 
-    <main class="page" id="research-root">
-      <section class="hero">
-        <h1>Investigacion Vue.js</h1>
-        <p>Seccion en construccion. Vamos a sumar conceptos interactivos luego.</p>
+    <main class="page research-page" id="research-root">
+      <section class="hero research-hero">
+        <p class="research-kicker">Tema de investigacion</p>
+        <h1>Vue.js - Conceptos clave y demos interactivas</h1>
+        <p>
+          Esta pagina funciona como laboratorio. En Fase 1 se define la estructura,
+          navegacion, objetivos y placeholders de cada demo. En Fase 2 se implementan
+          los ejemplos interactivos con Vue 3.
+        </p>
+        <div class="research-hero-meta">
+          <span id="research-summary">0 de 5 conceptos revisados</span>
+          <span id="research-scroll">Seccion activa: Introduccion</span>
+        </div>
+      </section>
+
+      <section class="research-shell">
+        <aside class="research-sidebar panel">
+          <h2>Indice</h2>
+          <nav class="research-index">
+            <a href="#concept-reactivity" data-research-link="concept-reactivity">1. Reactividad</a>
+            <a href="#concept-conditional" data-research-link="concept-conditional">2. Render condicional</a>
+            <a href="#concept-lists" data-research-link="concept-lists">3. Listas y key</a>
+            <a href="#concept-components" data-research-link="concept-components">4. Props y emit</a>
+            <a href="#concept-async" data-research-link="concept-async">5. Watch y async state</a>
+          </nav>
+
+          <div class="research-progress">
+            <label for="research-progress-bar">Progreso de lectura</label>
+            <div id="research-progress-bar" class="research-progress-track" aria-hidden="true">
+              <div id="research-progress-fill" class="research-progress-fill"></div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="research-content">
+          <article
+            id="concept-reactivity"
+            class="research-card panel"
+            data-research-section
+            data-concept-title="Reactividad"
+          >
+            <header class="research-card-head">
+              <h2>1. Reactividad con `ref` y `computed`</h2>
+              <button type="button" class="ghost" data-action="toggle-reviewed">Marcar revisado</button>
+            </header>
+            <p>
+              Objetivo: mostrar como Vue re-renderiza cuando cambia estado y como una
+              propiedad derivada evita recalculos manuales.
+            </p>
+            <div class="research-demo-placeholder">
+              <h3>Placeholder demo</h3>
+              <p>Se agregara un mini filtro de albums con contador reactivo.</p>
+            </div>
+            <pre class="research-code"><code>const query = ref("");
+const filtered = computed(() => albums.value.filter(...));</code></pre>
+          </article>
+
+          <article
+            id="concept-conditional"
+            class="research-card panel"
+            data-research-section
+            data-concept-title="Render condicional"
+          >
+            <header class="research-card-head">
+              <h2>2. Render condicional con `v-if` y `v-show`</h2>
+              <button type="button" class="ghost" data-action="toggle-reviewed">Marcar revisado</button>
+            </header>
+            <p>
+              Objetivo: comparar costo y comportamiento visual entre montar/desmontar
+              nodos y solo ocultarlos.
+            </p>
+            <div class="research-demo-placeholder">
+              <h3>Placeholder demo</h3>
+              <p>Se agregara un panel de detalle con transiciones de entrada y salida.</p>
+            </div>
+            <pre class="research-code"><code>&lt;Transition name="fade"&gt;
+  &lt;div v-if="open"&gt;...&lt;/div&gt;
+&lt;/Transition&gt;</code></pre>
+          </article>
+
+          <article
+            id="concept-lists"
+            class="research-card panel"
+            data-research-section
+            data-concept-title="Listas y key"
+          >
+            <header class="research-card-head">
+              <h2>3. Listas dinamicas con `v-for` y `:key`</h2>
+              <button type="button" class="ghost" data-action="toggle-reviewed">Marcar revisado</button>
+            </header>
+            <p>
+              Objetivo: explicar por que `:key` estable mejora performance y evita
+              estados inconsistentes en listas reordenadas.
+            </p>
+            <div class="research-demo-placeholder">
+              <h3>Placeholder demo</h3>
+              <p>Se agregara una lista editable con reorder para observar diff de DOM.</p>
+            </div>
+            <pre class="research-code"><code>&lt;li v-for="track in tracks" :key="track.id"&gt;
+  {{ track.title }}
+&lt;/li&gt;</code></pre>
+          </article>
+
+          <article
+            id="concept-components"
+            class="research-card panel"
+            data-research-section
+            data-concept-title="Props y emit"
+          >
+            <header class="research-card-head">
+              <h2>4. Comunicacion entre componentes (`props` + `emit`)</h2>
+              <button type="button" class="ghost" data-action="toggle-reviewed">Marcar revisado</button>
+            </header>
+            <p>
+              Objetivo: separar responsabilidades entre padre e hijo manteniendo flujo
+              de datos claro y unidireccional.
+            </p>
+            <div class="research-demo-placeholder">
+              <h3>Placeholder demo</h3>
+              <p>Se agregara un componente hijo que emite cambios al padre.</p>
+            </div>
+            <pre class="research-code"><code>// Child
+emit("update:modelValue", nextValue);</code></pre>
+          </article>
+
+          <article
+            id="concept-async"
+            class="research-card panel"
+            data-research-section
+            data-concept-title="Watch y async"
+          >
+            <header class="research-card-head">
+              <h2>5. `watch` + estados async (loading, error, success)</h2>
+              <button type="button" class="ghost" data-action="toggle-reviewed">Marcar revisado</button>
+            </header>
+            <p>
+              Objetivo: sincronizar efectos asincronicos con cambios de estado sin
+              bloquear la interfaz.
+            </p>
+            <div class="research-demo-placeholder">
+              <h3>Placeholder demo</h3>
+              <p>Se agregara una busqueda simulada con loading y manejo de errores.</p>
+            </div>
+            <pre class="research-code"><code>watch(query, async () =&gt; {
+  loading.value = true;
+  ...
+});</code></pre>
+          </article>
+        </section>
       </section>
     </main>
 
