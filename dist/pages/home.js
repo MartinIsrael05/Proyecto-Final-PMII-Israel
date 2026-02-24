@@ -1,12 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { loadAlbums, saveAlbums } from "../services/data-service.js";
 console.log("Home cargado");
 const container = document.getElementById("album-container");
@@ -106,7 +97,7 @@ if (container) {
     }
     albumContainer.addEventListener("click", event => {
         const target = event.target;
-        const button = target === null || target === void 0 ? void 0 : target.closest("[data-action='toggle-like']");
+        const button = target?.closest("[data-action='toggle-like']");
         if (!button)
             return;
         const id = Number(button.dataset.id);
@@ -114,20 +105,20 @@ if (container) {
             return;
         toggleLike(id);
     });
-    searchInput === null || searchInput === void 0 ? void 0 : searchInput.addEventListener("input", () => {
+    searchInput?.addEventListener("input", () => {
         filters.searchTerm = searchInput.value;
         renderHome();
     });
-    genreSelect === null || genreSelect === void 0 ? void 0 : genreSelect.addEventListener("change", () => {
+    genreSelect?.addEventListener("change", () => {
         filters.genre = genreSelect.value;
         renderHome();
     });
-    sortSelect === null || sortSelect === void 0 ? void 0 : sortSelect.addEventListener("change", () => {
+    sortSelect?.addEventListener("change", () => {
         const sortValue = sortSelect.value;
         filters.sort = sortValue;
         renderHome();
     });
-    clearFiltersButton === null || clearFiltersButton === void 0 ? void 0 : clearFiltersButton.addEventListener("click", () => {
+    clearFiltersButton?.addEventListener("click", () => {
         filters.searchTerm = "";
         filters.genre = "";
         filters.sort = "default";
@@ -139,20 +130,18 @@ if (container) {
             sortSelect.value = "default";
         renderHome();
     });
-    function initHome() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                setStatus("Cargando albums...", "info");
-                albumsState = yield loadAlbums();
-                renderGenres();
-                renderHome();
-            }
-            catch (error) {
-                albumContainer.innerHTML = "";
-                setStatus("Error cargando albums.", "error");
-                console.error("Error cargando albums:", error);
-            }
-        });
+    async function initHome() {
+        try {
+            setStatus("Cargando albums...", "info");
+            albumsState = await loadAlbums();
+            renderGenres();
+            renderHome();
+        }
+        catch (error) {
+            albumContainer.innerHTML = "";
+            setStatus("Error cargando albums.", "error");
+            console.error("Error cargando albums:", error);
+        }
     }
     initHome();
 }

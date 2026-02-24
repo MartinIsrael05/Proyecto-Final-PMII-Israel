@@ -1,12 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { loadAlbums, loadUsers, saveAlbums, saveUsers, clearStoredData } from "../services/data-service.js";
 import { Album } from "../models/album.js";
 import { User } from "../models/user.js";
@@ -76,9 +67,8 @@ else {
     };
     const normalizeText = (value) => value.trim().toLowerCase();
     const logAdminRequest = (action, entity, payload) => {
-        var _a, _b;
         const request = {
-            actorEmail: (_b = (_a = state.adminUser) === null || _a === void 0 ? void 0 : _a.email) !== null && _b !== void 0 ? _b : "unknown",
+            actorEmail: state.adminUser?.email ?? "unknown",
             action,
             entity,
             timestamp: new Date().toISOString(),
@@ -141,7 +131,7 @@ else {
           />
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="liked" ${(editing === null || editing === void 0 ? void 0 : editing.liked) ? "checked" : ""} />
+          <input type="checkbox" name="liked" ${editing?.liked ? "checked" : ""} />
           Liked
         </label>
         <div class="form-actions">
@@ -174,11 +164,11 @@ else {
           <input type="date" name="registerDate" value="${editing ? editing.registerDate : today()}" />
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="isSubscribed" ${(editing === null || editing === void 0 ? void 0 : editing.isSubscribed) ? "checked" : ""} />
+          <input type="checkbox" name="isSubscribed" ${editing?.isSubscribed ? "checked" : ""} />
           Suscripto
         </label>
         <label class="checkbox">
-          <input type="checkbox" name="isAdmin" ${(editing === null || editing === void 0 ? void 0 : editing.isAdmin) ? "checked" : ""} />
+          <input type="checkbox" name="isAdmin" ${editing?.isAdmin ? "checked" : ""} />
           Admin
         </label>
         <label>
@@ -320,11 +310,10 @@ else {
         }
     };
     const handleLogin = (event) => {
-        var _a, _b;
         event.preventDefault();
         const formData = new FormData(loginForm);
-        const email = String((_a = formData.get("email")) !== null && _a !== void 0 ? _a : "").trim();
-        const password = String((_b = formData.get("password")) !== null && _b !== void 0 ? _b : "").trim();
+        const email = String(formData.get("email") ?? "").trim();
+        const password = String(formData.get("password") ?? "").trim();
         const user = state.users.find(candidate => candidate.email === email && candidate.password === password);
         if (!user) {
             setMessage("Credenciales invalidas.");
@@ -357,7 +346,6 @@ else {
         return `${coversBasePath}${coverFileName}`;
     };
     const handleAlbumSubmit = (form) => {
-        var _a, _b;
         const formData = new FormData(form);
         const title = readText(formData, "title");
         const artist = readText(formData, "artist");
@@ -365,7 +353,7 @@ else {
         const year = Number.parseInt(yearRaw, 10);
         const genre = readText(formData, "genre");
         const coverFileName = readText(formData, "cover");
-        const liked = (_b = (_a = form.querySelector("input[name='liked']")) === null || _a === void 0 ? void 0 : _a.checked) !== null && _b !== void 0 ? _b : false;
+        const liked = form.querySelector("input[name='liked']")?.checked ?? false;
         if (!title) {
             setFeedback("El titulo del album es obligatorio.", "error");
             return;
@@ -434,14 +422,13 @@ else {
             .filter(value => Number.isFinite(value) && value > 0);
     };
     const handleUserSubmit = (form) => {
-        var _a, _b, _c, _d;
         const formData = new FormData(form);
         const name = readText(formData, "name");
         const email = readText(formData, "email");
         const password = readText(formData, "password");
         const registerDate = readText(formData, "registerDate") || today();
-        const isSubscribed = (_b = (_a = form.querySelector("input[name='isSubscribed']")) === null || _a === void 0 ? void 0 : _a.checked) !== null && _b !== void 0 ? _b : false;
-        const isAdmin = (_d = (_c = form.querySelector("input[name='isAdmin']")) === null || _c === void 0 ? void 0 : _c.checked) !== null && _d !== void 0 ? _d : false;
+        const isSubscribed = form.querySelector("input[name='isSubscribed']")?.checked ?? false;
+        const isAdmin = form.querySelector("input[name='isAdmin']")?.checked ?? false;
         const likedPostIDs = parseLikedIds(readText(formData, "likedPostIDs"));
         if (!name) {
             setFeedback("El nombre del usuario es obligatorio.", "error");
@@ -530,20 +517,19 @@ else {
         setFeedback(`Usuario borrado: ${removed.name}`, "success");
         render();
     };
-    const handleResetData = () => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
+    const handleResetData = async () => {
         const confirmed = window.confirm("Se van a restaurar albums y usuarios desde los JSON originales. Continuar?");
         if (!confirmed)
             return;
         clearStoredData();
         try {
-            const [albums, users] = yield Promise.all([loadAlbums(), loadUsers()]);
+            const [albums, users] = await Promise.all([loadAlbums(), loadUsers()]);
             state.albums = albums;
             state.users = users;
             state.editingAlbumId = null;
             state.editingUserId = null;
             if (state.adminUser) {
-                state.adminUser = (_a = users.find(user => { var _a; return user.email === ((_a = state.adminUser) === null || _a === void 0 ? void 0 : _a.email); })) !== null && _a !== void 0 ? _a : null;
+                state.adminUser = users.find(user => user.email === state.adminUser?.email) ?? null;
             }
             setFeedback("Datos demo restaurados desde JSON.", "success");
             setListStatus("Datos restaurados correctamente.", "success");
@@ -554,8 +540,8 @@ else {
             setFeedback("No se pudieron restaurar los datos demo.", "error");
             setListStatus("Error al restaurar datos demo.", "error");
         }
-    });
-    root.addEventListener("click", (event) => __awaiter(void 0, void 0, void 0, function* () {
+    };
+    root.addEventListener("click", async (event) => {
         const target = event.target;
         if (!target)
             return;
@@ -608,19 +594,19 @@ else {
             return;
         }
         if (action === "reset-data") {
-            yield handleResetData();
+            await handleResetData();
         }
-    }));
+    });
     searchInput.addEventListener("input", () => {
         state.searchTerm = searchInput.value;
         render();
     });
     loginForm.addEventListener("submit", handleLogin);
-    const initAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
+    const initAdmin = async () => {
         try {
             setFeedback("Cargando datos...", "info");
             setListStatus("Cargando datos...", "info");
-            const [albums, users] = yield Promise.all([loadAlbums(), loadUsers()]);
+            const [albums, users] = await Promise.all([loadAlbums(), loadUsers()]);
             state.albums = albums;
             state.users = users;
             setMessage("");
@@ -632,7 +618,7 @@ else {
             setMessage("No se pudieron cargar los datos.");
             setListStatus("Error al cargar datos.", "error");
         }
-    });
+    };
     render();
     initAdmin();
 }

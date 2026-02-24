@@ -22,5 +22,8 @@
   "devDependencies": {
     "live-server": "^1.2.2",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "vue": "^3.5.28"
   }
 }

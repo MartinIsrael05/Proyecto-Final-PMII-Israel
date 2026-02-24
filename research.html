@@ -68,10 +68,7 @@
               Objetivo: mostrar como Vue re-renderiza cuando cambia estado y como una
               propiedad derivada evita recalculos manuales.
             </p>
-            <div class="research-demo-placeholder">
-              <h3>Placeholder demo</h3>
-              <p>Se agregara un mini filtro de albums con contador reactivo.</p>
-            </div>
+            <div id="vue-reactivity-demo" class="vue-demo-root"></div>
             <pre class="research-code"><code>const query = ref("");
 const filtered = computed(() => albums.value.filter(...));</code></pre>
           </article>
@@ -90,10 +87,7 @@ const filtered = computed(() => albums.value.filter(...));</code></pre>
               Objetivo: comparar costo y comportamiento visual entre montar/desmontar
               nodos y solo ocultarlos.
             </p>
-            <div class="research-demo-placeholder">
-              <h3>Placeholder demo</h3>
-              <p>Se agregara un panel de detalle con transiciones de entrada y salida.</p>
-            </div>
+            <div id="vue-conditional-demo" class="vue-demo-root"></div>
             <pre class="research-code"><code>&lt;Transition name="fade"&gt;
   &lt;div v-if="open"&gt;...&lt;/div&gt;
 &lt;/Transition&gt;</code></pre>
@@ -113,10 +107,7 @@ const filtered = computed(() => albums.value.filter(...));</code></pre>
               Objetivo: explicar por que `:key` estable mejora performance y evita
               estados inconsistentes en listas reordenadas.
             </p>
-            <div class="research-demo-placeholder">
-              <h3>Placeholder demo</h3>
-              <p>Se agregara una lista editable con reorder para observar diff de DOM.</p>
-            </div>
+            <div id="vue-lists-demo" class="vue-demo-root"></div>
             <pre class="research-code"><code>&lt;li v-for="track in tracks" :key="track.id"&gt;
   {{ track.title }}
 &lt;/li&gt;</code></pre>
@@ -136,10 +127,7 @@ const filtered = computed(() => albums.value.filter(...));</code></pre>
               Objetivo: separar responsabilidades entre padre e hijo manteniendo flujo
               de datos claro y unidireccional.
             </p>
-            <div class="research-demo-placeholder">
-              <h3>Placeholder demo</h3>
-              <p>Se agregara un componente hijo que emite cambios al padre.</p>
-            </div>
+            <div id="vue-components-demo" class="vue-demo-root"></div>
             <pre class="research-code"><code>// Child
 emit("update:modelValue", nextValue);</code></pre>
           </article>
@@ -158,10 +146,7 @@ emit("update:modelValue", nextValue);</code></pre>
               Objetivo: sincronizar efectos asincronicos con cambios de estado sin
               bloquear la interfaz.
             </p>
-            <div class="research-demo-placeholder">
-              <h3>Placeholder demo</h3>
-              <p>Se agregara una busqueda simulada con loading y manejo de errores.</p>
-            </div>
+            <div id="vue-async-demo" class="vue-demo-root"></div>
             <pre class="research-code"><code>watch(query, async () =&gt; {
   loading.value = true;
   ...
@@ -171,6 +156,13 @@ emit("update:modelValue", nextValue);</code></pre>
       </section>
     </main>
 
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+        }
+      }
+    </script>
     <script type="module" src="./dist/main.js"></script>
   </body>
 </html>
