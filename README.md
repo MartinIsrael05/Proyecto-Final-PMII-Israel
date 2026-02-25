@@ -1,36 +1,88 @@
 # Proyecto Final PMII - SoundLab
 
-Este proyecto fue desarrollado con HTML, CSS y TypeScript.
+Sitio web de 3 paginas para **Programacion Multimedial II**:
 
-Para ejecutarlo correctamente y ver todos los albumes, usa una de estas opciones.
+- `index.html`: galeria de albums con carga asincronica desde JSON.
+- `admin.html`: ABM de albums y usuarios con login admin.
+- `research.html`: pagina interactiva del tema de investigacion (**Vue.js**).
 
-## Opcion 1: Live Server desde VS Code
+## Stack
 
-1. Abrir la carpeta del proyecto en Visual Studio Code.
-2. Abrir `index.html`.
-3. Ejecutar **Open with Live Server**.
+- HTML5
+- CSS3
+- TypeScript (compilado con `tsc`)
+- Vue 3 (solo en `research.html`, cargado por `importmap` CDN)
+- LocalStorage para persistencia en el front
 
-## Opcion 2: Terminal con npm
+## Requisitos
 
-1. Instalar dependencias (solo la primera vez):
+- Node.js 18+ (recomendado)
+- npm
+
+## Instalacion
 
 ```bash
 npm install
 ```
 
-2. Compilar TypeScript:
+## Scripts
+
+- `npm run build`: compila `src/` a `dist/`
+- `npm run start`: levanta `live-server` abriendo `index.html`
+
+## Ejecucion
+
+Opcion A (recomendada):
 
 ```bash
 npm run build
-```
-
-3. Levantar el servidor:
-
-```bash
 npm run start
 ```
 
-## Nota sobre albumes y localStorage
+Opcion B:
 
-El proyecto guarda cambios en `localStorage`.  
-Si no ves todos los albumes nuevos, borra la clave `soundlab_albums` desde DevTools y recarga la pagina.
+- Abrir `index.html` con Live Server desde VS Code.
+- Si hay cambios en TypeScript, correr antes `npm run build`.
+
+## Credenciales Admin Demo
+
+- Email: `admin@soundlab.com`
+- Password: `admin123`
+
+Usuario no admin de prueba:
+
+- Email: `user@soundlab.com`
+- Password: `user123`
+
+## Persistencia y reset de datos
+
+El proyecto persiste en `localStorage`:
+
+- `soundlab_albums`
+- `soundlab_users`
+
+Formas de reset:
+
+- Desde Admin: boton **Reset demo** (restaura desde `public/data/*.json`).
+- Desde DevTools: borrar esas claves en `Application > Local Storage`.
+
+## Portadas de albums
+
+- Las imagenes viven en `public/images/covers/`.
+- En el form de Admin, el campo portada acepta **solo nombre de archivo** (ej: `thriller.jpg`).
+- El sistema arma la ruta completa automaticamente como `public/images/covers/<archivo>`.
+
+## Estructura principal
+
+- `src/models/`: clases `Album` y `User`.
+- `src/services/data-service.ts`: carga asincronica JSON + persistencia local.
+- `src/pages/home.ts`: render de galeria, filtros, orden y likes.
+- `src/pages/admin.ts`: login admin, CRUD de albums/usuarios, validaciones, bitacora de acciones.
+- `src/pages/research.ts`: demos Vue (reactividad, condicionales, listas con key, props/emit, watch async).
+- `styles/main.css`: estilos globales y responsive.
+
+## Notas para entrega
+
+- Si subis cambios de TypeScript, subi tambien `dist/` actualizado.
+- Si no se reflejan cambios de albums/usuarios, probablemente hay datos previos en localStorage.
+- La seccion de Vue en `research.html` requiere conexion a internet para cargar Vue desde CDN.
