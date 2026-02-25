@@ -88,6 +88,9 @@ else {
         const ids = state.users.map(user => user.id);
         return ids.length ? Math.max(...ids) + 1 : 1;
     };
+    const getAdminCount = () => {
+        return state.users.filter(user => user.isAdmin).length;
+    };
     const renderTabs = () => {
         const tabs = dashboardSection.querySelectorAll("[data-tab]");
         tabs.forEach(tab => {
@@ -475,6 +478,10 @@ else {
             const target = state.users.find(user => user.id === state.editingUserId);
             if (!target)
                 return;
+            if (target.isAdmin && !data.isAdmin && getAdminCount() <= 1) {
+                setFeedback("No se puede quitar el rol admin al ultimo administrador.", "error");
+                return;
+            }
             const before = target.toData();
             Object.assign(target, data);
             logAdminRequest("update", "user", { before, after: data });
@@ -508,6 +515,10 @@ else {
         if (index === -1)
             return;
         const removed = state.users[index];
+        if (removed.isAdmin && getAdminCount() <= 1) {
+            setFeedback("No se puede borrar al ultimo administrador.", "error");
+            return;
+        }
         const confirmed = window.confirm(`Vas a borrar el usuario "${removed.name}". Esta accion no se puede deshacer.`);
         if (!confirmed)
             return;

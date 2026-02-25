@@ -30,6 +30,7 @@ async function initResearchPage(root) {
             scrollStatus.textContent = `Seccion activa: ${title}`;
         }
     };
+    // Intersection Observer para detectar la sección activa
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (!entry.isIntersecting)
@@ -121,7 +122,7 @@ function mountVueDemos(vue) {
           </p>
           <ul class="vue-list">
             <li v-for="album in filteredAlbums" :key="album.id">
-              <strong>{{ album.title }}</strong> - {{ album.artist }} · {{ album.genre }}
+              <strong>{{ album.title }}</strong> - {{ album.artist }} - {{ album.genre }}
             </li>
           </ul>
         </div>
@@ -151,7 +152,7 @@ function mountVueDemos(vue) {
                 ConditionalPanel
             },
             setup() {
-                const mode = ref("if");
+                const mode = ref("if"); // Cambia entre v-if y v-show (default: v-if)
                 const open = ref(false);
                 return { mode, open };
             },
@@ -203,7 +204,7 @@ function mountVueDemos(vue) {
       <article class="vue-track-row">
         <div class="vue-track-main">
           <strong>{{ track.title }}</strong>
-          <small>{{ track.artist }} · id: {{ track.id }}</small>
+          <small>{{ track.artist }} - id: {{ track.id }}</small>
         </div>
         <label class="vue-mini-field">
           Nota local
@@ -267,7 +268,7 @@ function mountVueDemos(vue) {
           </p>
           <ul class="vue-list">
             <li v-for="track in tracks" :key="track.id">
-              <TrackRow :track="track" @remove="removeTrack" />
+              <TrackRow :track="track" @remove="removeTrack" /> // emit remove con el id del track a eliminar
             </li>
           </ul>
         </div>
@@ -346,7 +347,10 @@ function mountVueDemos(vue) {
                     "Kendrick Lamar",
                     "Billie Eilish",
                     "Dua Lipa",
-                    "Metallica"
+                    "Metallica",
+                    "Bad Bunny",
+                    "Adele",
+                    "Bruno Mars"
                 ];
                 const fakeSearch = async (term) => {
                     await new Promise(resolve => setTimeout(resolve, 650));
