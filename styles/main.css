@@ -9,7 +9,7 @@
   --accent-dark: #b95d45;
   --card: #ffffff;
   --border: #e2d8cf;
-  --shadow: 0 18px 45px rgba(27, 27, 27, 0.08);
+  --shadow: 0 1.125em 2.8125em rgba(27, 27, 27, 0.08);
 }
 
 * {
@@ -40,23 +40,23 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
-  padding: 24px 8vw;
+  gap: 1.5em;
+  padding: 1.5em 8vw;
 }
 
 .brand {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.25em;
 }
 
 .logo {
   font-family: "Fraunces", serif;
-  font-size: 28px;
+  font-size: 1.75em;
 }
 
 .tagline {
-  font-size: 14px;
+  font-size: 0.875em;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -64,12 +64,12 @@ a {
 
 .site-nav {
   display: flex;
-  gap: 16px;
+  gap: 1em;
   font-weight: 600;
 }
 
 .site-nav a {
-  padding: 8px 12px;
+  padding: 0.5em 0.75em;
   border-radius: 999px;
   transition: all 0.2s ease;
 }
@@ -81,23 +81,23 @@ a {
 }
 
 .page {
-  width: min(1100px, 90vw);
-  margin: 0 auto 64px;
+  width: min(68.75em, 90vw);
+  margin: 0 auto 4em;
   animation: fadeUp 0.6s ease both;
 }
 
 .hero {
   background: var(--card);
   border-radius: 24px;
-  padding: 32px;
+  padding: 2em;
   box-shadow: var(--shadow);
-  margin-bottom: 32px;
+  margin-bottom: 2em;
 }
 
 .hero h1 {
   margin-top: 0;
   font-family: "Fraunces", serif;
-  font-size: 38px;
+  font-size: 2.375em;
 }
 
 .hero p {
@@ -107,7 +107,7 @@ a {
 
 .research-page {
   display: grid;
-  gap: 24px;
+  gap: 1.5em;
 }
 
 .research-hero {
@@ -119,16 +119,16 @@ a {
   content: "";
   position: absolute;
   inset: -30% auto auto 70%;
-  width: 260px;
-  height: 260px;
+  width: 16.25em;
+  height: 16.25em;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(224, 122, 95, 0.2), rgba(224, 122, 95, 0));
   pointer-events: none;
 }
 
 .research-kicker {
-  margin: 0 0 8px;
-  font-size: 13px;
+  margin: 0 0 0.5em;
+  font-size: 0.8125em;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent-dark);
@@ -136,18 +136,18 @@ a {
 }
 
 .research-hero-meta {
-  margin-top: 14px;
+  margin-top: 0.875em;
   display: flex;
-  gap: 18px;
+  gap: 1.125em;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875em;
   font-weight: 600;
 }
 
 .research-shell {
   display: grid;
-  grid-template-columns: minmax(220px, 280px) 1fr;
-  gap: 20px;
+  grid-template-columns: minmax(13.75em, 17.5em) 1fr;
+  gap: 1.25em;
   align-items: start;
 }
 
@@ -157,23 +157,23 @@ a {
 
 .research-sidebar {
   position: sticky;
-  top: 20px;
+  top: 1.25em;
   align-self: start;
 }
 
 .research-sidebar h2 {
-  margin: 0 0 10px;
+  margin: 0 0 0.625em;
   font-family: "Fraunces", serif;
 }
 
 .research-index {
   display: grid;
-  gap: 8px;
+  gap: 0.5em;
 }
 
 .research-index a {
   display: block;
-  padding: 8px 10px;
+  padding: 0.5em 0.625em;
   border-radius: 10px;
   border: 1px solid var(--border);
   color: var(--muted);
@@ -189,20 +189,20 @@ a {
 }
 
 .research-progress {
-  margin-top: 16px;
+  margin-top: 1em;
   display: grid;
-  gap: 8px;
+  gap: 0.5em;
 }
 
 .research-progress label {
-  font-size: 13px;
+  font-size: 0.8125em;
   color: var(--muted);
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .research-progress-track {
-  height: 10px;
+  height: 0.625em;
   border-radius: 999px;
   background: #ece7e2;
   overflow: hidden;
@@ -217,7 +217,7 @@ a {
 
 .research-content {
   display: grid;
-  gap: 16px;
+  gap: 1em;
   min-width: 0;
 }
 
@@ -228,35 +228,35 @@ a {
 }
 
 .research-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-0.125em);
   border-color: #d8c9bb;
 }
 
 .research-card.is-reviewed {
   border-color: #8bc8a7;
-  box-shadow: 0 18px 45px rgba(77, 134, 98, 0.12);
+  box-shadow: 0 1.125em 2.8125em rgba(77, 134, 98, 0.12);
 }
 
 .research-card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 1em;
 }
 
 .research-card-head h2 {
   margin: 0;
-  font-size: 24px;
+  font-size: 1.5em;
 }
 
 .research-code {
-  margin: 14px 0 0;
-  padding: 14px;
+  margin: 0.875em 0 0;
+  padding: 0.875em;
   border-radius: 12px;
   background: #111827;
   color: #e5e7eb;
   overflow-x: auto;
-  font-size: 13px;
+  font-size: 0.8125em;
   max-width: 100%;
 }
 
@@ -265,44 +265,44 @@ a {
 }
 
 .vue-demo-root {
-  margin-top: 14px;
+  margin-top: 0.875em;
   min-width: 0;
 }
 
 .vue-demo {
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 14px;
+  padding: 0.875em;
   background: #fffdfa;
   display: grid;
-  gap: 12px;
+  gap: 0.75em;
 }
 
 .vue-demo-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.625em;
 }
 
 .vue-field,
 .vue-inline-field,
 .vue-mini-field {
   display: grid;
-  gap: 6px;
+  gap: 0.375em;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875em;
   font-weight: 600;
 }
 
 .vue-inline-field {
-  width: min(220px, 100%);
+  width: min(13.75em, 100%);
 }
 
 .vue-field input,
 .vue-inline-field select,
 .vue-mini-field input {
   width: 100%;
-  padding: 9px 10px;
+  padding: 0.5625em 0.625em;
   border: 1px solid var(--border);
   border-radius: 10px;
   font-family: inherit;
@@ -310,15 +310,15 @@ a {
 
 .vue-list {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 1.125em;
   display: grid;
-  gap: 10px;
+  gap: 0.625em;
 }
 
 .vue-panel {
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 12px;
+  padding: 0.75em;
   background: #fff;
 }
 
@@ -330,21 +330,21 @@ a {
 .fade-slide-enter-from,
 .fade-slide-leave-to {
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translateY(-0.25em);
 }
 
 .vue-track-row {
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 10px;
+  padding: 0.625em;
   background: #fff;
   display: grid;
-  gap: 10px;
+  gap: 0.625em;
 }
 
 .vue-track-main {
   display: grid;
-  gap: 4px;
+  gap: 0.25em;
 }
 
 .vue-track-main small {
@@ -354,27 +354,27 @@ a {
 .vue-track-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0.5em;
   align-items: center;
 }
 
 .vue-score-control {
   display: flex;
-  gap: 12px;
+  gap: 0.75em;
   align-items: center;
 }
 
 .home-controls {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr auto;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 0.75em;
+  margin-top: 1.25em;
 }
 
 .home-controls input,
 .home-controls select,
 .admin-search-row input {
-  padding: 10px 12px;
+  padding: 0.625em 0.75em;
   border-radius: 12px;
   border: 1px solid var(--border);
   font-family: inherit;
@@ -383,17 +383,17 @@ a {
 .album-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
+  gap: 1.25em;
 }
 
 .album-card {
   background: var(--card);
   border-radius: 18px;
-  padding: 16px;
+  padding: 1em;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   display: grid;
-  gap: 12px;
+  gap: 0.75em;
   animation: rise 0.6s ease both;
 }
 
@@ -405,7 +405,7 @@ a {
 
 .album-content {
   display: grid;
-  gap: 6px;
+  gap: 0.375em;
 }
 
 .album-content h3 {
@@ -421,7 +421,7 @@ a {
   background: var(--accent);
   color: #fff;
   border-radius: 12px;
-  padding: 8px 12px;
+  padding: 0.5em 0.75em;
   cursor: pointer;
   font-weight: 600;
   transition: transform 0.2s ease, background 0.2s ease;
@@ -429,49 +429,49 @@ a {
 
 .like-btn:hover {
   background: var(--accent-dark);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625em);
 }
 
 .panel {
   background: var(--card);
   border-radius: 24px;
-  padding: 28px;
+  padding: 1.75em;
   box-shadow: var(--shadow);
-  margin-bottom: 32px;
+  margin-bottom: 2em;
 }
 
 .admin-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 2fr;
-  gap: 24px;
+  grid-template-columns: minmax(16.25em, 1fr) 2fr;
+  gap: 1.5em;
 }
 
 .admin-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  gap: 16px;
+  margin-bottom: 1.25em;
+  gap: 1em;
 }
 
 .admin-search-row {
   display: grid;
-  grid-template-columns: minmax(220px, 420px) 1fr;
-  gap: 14px;
+  grid-template-columns: minmax(13.75em, 26.25em) 1fr;
+  gap: 0.875em;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 1em;
 }
 
 .tab-group {
   display: flex;
-  gap: 12px;
+  gap: 0.75em;
 }
 
 .tab-button {
   border: 1px solid var(--border);
   background: transparent;
   color: var(--accent);
-  padding: 8px 14px;
+  padding: 0.5em 0.875em;
   border-radius: 999px;
   cursor: pointer;
   font-weight: 600;
@@ -488,7 +488,7 @@ button,
   border: none;
   background: var(--accent);
   color: #fff;
-  padding: 10px 16px;
+  padding: 0.625em 1em;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
@@ -498,7 +498,7 @@ button,
 button:hover,
 .ghost:hover {
   background: var(--accent-dark);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625em);
 }
 
 button.ghost,
@@ -510,18 +510,18 @@ button.ghost,
 
 .admin-form {
   display: grid;
-  gap: 12px;
+  gap: 0.75em;
 }
 
 .admin-form label {
   display: grid;
-  gap: 6px;
+  gap: 0.375em;
   font-weight: 600;
   color: var(--muted);
 }
 
 .admin-form input {
-  padding: 10px 12px;
+  padding: 0.625em 0.75em;
   border-radius: 12px;
   border: 1px solid var(--border);
   font-family: inherit;
@@ -530,54 +530,54 @@ button.ghost,
 .admin-form .checkbox {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5em;
   font-weight: 600;
   color: var(--muted);
 }
 
 .form-actions {
   display: flex;
-  gap: 12px;
+  gap: 0.75em;
 }
 
 .admin-grid {
   display: grid;
-  gap: 16px;
+  gap: 1em;
 }
 
 .admin-card {
   background: #fff;
   border-radius: 16px;
-  padding: 16px;
+  padding: 1em;
   border: 1px solid var(--border);
   display: grid;
-  grid-template-columns: 90px 1fr;
-  gap: 16px;
+  grid-template-columns: 5.625em 1fr;
+  gap: 1em;
   align-items: center;
 }
 
 .admin-card img {
-  width: 90px;
-  height: 90px;
+  width: 5.625em;
+  height: 5.625em;
   border-radius: 12px;
   object-fit: cover;
 }
 
 .card-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 0.625em;
+  margin-top: 0.5em;
 }
 
 .admin-message {
-  margin-top: 16px;
+  margin-top: 1em;
   color: var(--accent-dark);
   font-weight: 600;
 }
 
 .admin-feedback {
-  margin-bottom: 16px;
-  padding: 12px 16px;
+  margin-bottom: 1em;
+  padding: 0.75em 1em;
   border-radius: 12px;
   background: #f5f2ef;
   color: var(--muted);
@@ -610,15 +610,15 @@ margin-top: 0.5em;
 }
 
 .admin-log {
-  margin-top: 24px;
-  padding-top: 20px;
+  margin-top: 1.5em;
+  padding-top: 1.25em;
   border-top: 1px dashed var(--border);
 }
 
 .admin-log h2 {
-  margin: 0 0 10px;
+  margin: 0 0 0.625em;
   font-family: "Fraunces", serif;
-  font-size: 24px;
+  font-size: 1.5em;
 }
 
 .admin-log-list {
@@ -626,16 +626,16 @@ margin-top: 0.5em;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 8px;
+  gap: 0.5em;
 }
 
 .admin-log-list li {
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 0.625em 0.75em;
   background: #fff;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.875em;
 }
 
 .empty-state {
@@ -649,7 +649,7 @@ margin-top: 0.5em;
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(0.75em);
   }
   to {
     opacity: 1;
@@ -660,7 +660,7 @@ margin-top: 0.5em;
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(0.875em);
   }
   to {
     opacity: 1;
@@ -668,12 +668,12 @@ margin-top: 0.5em;
   }
 }
 /* Research Responsive */
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .site-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 20px 6vw;
+    padding: 1.25em 6vw;
   }
 
   .brand {
@@ -687,17 +687,17 @@ margin-top: 0.5em;
   }
 
   .page {
-    width: min(1100px, 92vw);
+    width: min(68.75em, 92vw);
   }
 
   .hero,
   .panel {
-    padding: 22px;
+    padding: 1.375em;
   }
 
   .research-hero-meta {
     flex-direction: column;
-    gap: 8px;
+    gap: 0.5em;
   }
 
   .research-shell {
@@ -730,19 +730,19 @@ margin-top: 0.5em;
   }
 }
 /*Responsive Album Grid - 3 cards*/
-@media (max-width: 1100px) {
+@media (max-width: 68.75em) {
   .album-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 /*Responsive Album Grid - 2 cards*/
-@media (max-width: 760px) {
+@media (max-width: 47.5em) {
   .album-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 /*Responsive Album Grid - 1 card*/
-@media (max-width: 520px) {
+@media (max-width: 32.5em) {
   .album-grid {
     grid-template-columns: 1fr;
   }
@@ -753,6 +753,6 @@ margin-top: 0.5em;
 
   .hero,
   .panel {
-    padding: 18px;
+    padding: 1.125em;
   }
 }
